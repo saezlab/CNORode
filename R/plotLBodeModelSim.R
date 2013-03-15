@@ -1,18 +1,18 @@
 #
 #  This file is part of the CNO software
 #
-#  Copyright (c) 2011-2012 - EBI
+#  Copyright (c) 2011-2013 - EBI
 #
 #  File author(s): CNO developers (cno-dev@ebi.ac.uk)
 #
-#  Distributed under the GPLv2 License.
+#  Distributed under the GPLv3 License.
 #  See accompanying file LICENSE.txt or copy at
-#      http://www.gnu.org/licenses/gpl-2.0.html
+#      http://www.gnu.org/licenses/gpl-3.0.html
 #
-#  CNO website: http://www.ebi.ac.uk/saezrodriguez/softare/cno
+#  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: plotLBodeModelSim.R 2382 2012-09-10 11:44:06Z davidh $
+# $Id: plotLBodeModelSim.R 3184 2013-01-21 13:50:31Z cokelaer $
 plotLBodeModelSim <-function
 (
 		cnolist,				    model,					    ode_parameters=NULL,
@@ -24,11 +24,12 @@ plotLBodeModelSim <-function
 )
 {
 
+    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
 	if(!is.null(timeSignals))cnolist$timeSignals=timeSignals;
-	
+
   	states_index=which(as.logical(getStates(adjMatrix)));
 
 	sim_data=getLBodeModelSim(cnolist,model,
@@ -36,9 +37,9 @@ plotLBodeModelSim <-function
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
 
 	sim_data=lapply(sim_data,function(x) x[,states_index]);
-
 	times=cnolist$timeSignals;
 	cnolist$valueSignals=sim_data;
+    cnolist$valueVariances = sim_data # variance should be set to NA but does not matter here 
 	cnolist$namesSignals=model$namesSpecies[states_index];
 	cnolist$namesCues=c(cnolist$namesStimuli,cnolist$namesInhibitors);
 
@@ -47,15 +48,16 @@ plotLBodeModelSim <-function
 	cnolist$valueCues[which(cnolist$valueCues>0)]=1;
 	names(cnolist$valueCues)=cnolist$namesCues;
 
+
 	if(large)
 	{
-		plotCNOlistLarge(cnolist,nsplit);
+		plotCNOlistLarge(CNOlist(cnolist),nsplit);
 	}
 	else
 	{
-		plotCNOlist(cnolist);
+		plotCNOlist(CNOlist(cnolist));
 	}
-	
+
 
   return(sim_data);
 }

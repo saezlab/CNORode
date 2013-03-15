@@ -1,18 +1,18 @@
 #
 #  This file is part of the CNO software
 #
-#  Copyright (c) 2011-2012 - EBI
+#  Copyright (c) 2011-2013 - EBI
 #
 #  File author(s): CNO developers (cno-dev@ebi.ac.uk)
 #
-#  Distributed under the GPLv2 License.
+#  Distributed under the GPLv3 License.
 #  See accompanying file LICENSE.txt or copy at
-#      http://www.gnu.org/licenses/gpl-2.0.html
+#      http://www.gnu.org/licenses/gpl-3.0.html
 #
-#  CNO website: http://www.ebi.ac.uk/saezrodriguez/softare/cno
+#  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: parEstimationLBodeSSm.R 1832 2012-07-24 14:07:25Z davidh $
+# $Id: parEstimationLBodeSSm.R 3184 2013-01-21 13:50:31Z cokelaer $
 parEstimationLBodeSSm <-function
 (
 		cnolist,				model,					ode_parameters=NULL,
@@ -23,6 +23,8 @@ parEstimationLBodeSSm <-function
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
 )
 {
+
+   if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
    tryCatch({library(MEIGOR)}, error=function(e){print("MEIGOR (essR) package not found.
 	SSm not available. Install the package and load it or try the Genetic Algorithm
 	optimiser instead.");return(ode_parameters);});
