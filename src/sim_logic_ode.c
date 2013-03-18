@@ -208,7 +208,9 @@ SEXP sim_logic_ode
 	  tempData.nInhibitors=nInhibitors;
 	  tempData.nSignals=nSignals;
 	  tempData.nTimes=nTimes;
-	  tempData.nExperiments=0; //not used but required to prevent warnings in MACOSX leopard (bioconductor)
+	  //tempData.nExperiments=0; //not used but required to prevent warnings in MACOSX leopard (bioconductor)
+      tempData.isInput = 0;  // not used but gets rid of a warning.
+
 
 	  //tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
 	  tempData.adjacencyMatrix=adjMatrix;
