@@ -167,9 +167,9 @@ should type the following commands:
 % show data and model loading
 <<quickstart, eval=TRUE, results=hide>>=
 	library(CNORode)
-	model=readSIF(system.file("/doc/ToyModelMMB_FeedbackAnd.sif",
+	model=readSIF(system.file("doc", "ToyModelMMB_FeedbackAnd.sif",
 		package="CNORode"));
-	cno_data=readMIDAS(system.file("/doc/ToyModelMMB_FeedbackAnd.csv",
+	cno_data=readMIDAS(system.file("doc", "ToyModelMMB_FeedbackAnd.csv",
 		package="CNORode"));
 	cnolist=makeCNOlist(cno_data,subfield=FALSE);
 @
