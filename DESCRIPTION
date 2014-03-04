@@ -1,14 +1,13 @@
 Package: CNORode
 Type: Package
-Title: ODE add-on to CellNOptR 
-Version: 1.5.1
+Title: ODE add-on to CellNOptR
+Version: 1.5.2
 Date: 2012-03-20
 Author: David Henriques, Thomas Cokelaer
 Maintainer: David Henriques <davidpcnet@hotmail.com>
-biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
 Description: ODE add-on to CellNOptR
 License: GPL-3
 LazyLoad: yes
 Depends: CellNOptR (>= 1.5.14), genalg
 Enhances: MEIGOR
-biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
+biocViews: CellBasedAssays, CellBiology, Proteomics, TimeCourse
