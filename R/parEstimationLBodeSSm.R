@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: parEstimationLBodeSSm.R 3184 2013-01-21 13:50:31Z cokelaer $
+# $Id: parEstimationLBodeSSm.R 4446 2014-03-12 15:35:32Z cokelaer $
 parEstimationLBodeSSm <-function
 (
 		cnolist,				model,					ode_parameters=NULL,
@@ -20,7 +20,8 @@ parEstimationLBodeSSm <-function
 		ndiverse=NULL,			dim_refset=NULL, 		local_solver=NULL,      
 		time=1,					verbose=0, 				transfer_function=3,	
 		reltol=1e-4,			atol=1e-3,				maxStepSize=Inf,		
-		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1
+		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1,
+        useVariances=F, initial_state=0.1
 )
 {
 
@@ -49,7 +50,10 @@ parEstimationLBodeSSm <-function
 
 	problem=list();
 	problem$f<-getLBodeContObjFunction(cnolist,	model,ode_parameters,indices,
-	time,verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+	  time,verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,
+      nan_fac, useVariances, initial_state);
+
+
 	problem$x_L <- ode_parameters$LB[ode_parameters$index_opt_pars];
 	problem$x_U <- ode_parameters$UB[ode_parameters$index_opt_pars];
 	problem$x_0<- ode_parameters$parValues[ode_parameters$index_opt_pars];
@@ -59,7 +63,7 @@ parEstimationLBodeSSm <-function
 	opts$maxeval=maxeval;
 	opts$maxtime=maxtime;
 	if(!is.null(local_solver))opts$local_solver=local_solver;
-	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
+	if(!is.null(ndiverse))opts$ndiverse=ndiverse;
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;  
 	results=essR(problem,opts);
 	ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;

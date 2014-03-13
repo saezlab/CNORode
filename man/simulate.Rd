@@ -1,7 +1,6 @@
-\name{getLBodeDataSim}
+\name{simulate}
 
-\alias{getLBodeDataSim}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\alias{simulate}
 
 \title{
 	Simulate value signals a CNO list With Logic-Based ODEs.
@@ -12,14 +11,14 @@
 	returns a list with the same size of the cnolist$valueSignals. 
 }
 
+
 \usage{
-	getLBodeDataSim(cnolist, model, ode_parameters = NULL, indices = NULL,
-	timeSignals=NULL, time = 1, verbose = 0, transfer_function = 3, 
-	reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, 
-	maxErrTestsFails = 50, initial_state=0.1)
+	simulate(cnolist, model, ode_parameters=NULL, indices=NULL,
+	adjMatrix=NULL, time=1, verbose=0, transfer_function=3,
+	reltol=1e-04, atol=0.001, maxStepSize=Inf, maxNumSteps=1e+05, 
+	maxErrTestsFails=50)
 }
 
-%- maybe also 'usage' for other objects documented here.
 	\arguments{
   	\item{cnolist}{
   		A list containing the experimental design and data.
@@ -64,10 +63,6 @@
 		Specifies the maximum number of error test failures permitted in attempting
 		one step.
 	}
-    \item{initial_state}{
-initial state of the dynamic nodes (non-measured) (Defaults to 0.1)
-}
-
 }
 
 \details{
@@ -97,8 +92,6 @@ library(CNORode)
 data("ToyCNOlist",package="CNORode");
 data("ToyModel",package="CNORode");
 data("ToyIndices",package="CNORode");
-dataSimulation=getLBodeDataSim(cnolistCNORodeExample, model,indices=indices);
+dataSimulation = simulate(cnolistCNORodeExample, model,indices=indices);
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 

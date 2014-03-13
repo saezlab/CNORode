@@ -18,7 +18,7 @@
 	plotLBodeModelSim(cnolist, model, ode_parameters = NULL, indices = NULL, 
 	adjMatrix = NULL, timeSignals=NULL, time = 1, verbose = 0, transfer_function = 3,
 	reltol = 1e-04, atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05,
-	maxErrTestsFails = 50, large = FALSE, nsplit = 4)
+	maxErrTestsFails = 50, large = FALSE, nsplit = 4, show=T)
 }
 %- maybe also 'usage' for other objects documented here.
 

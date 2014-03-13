@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: plotLBodeFitness.R 3184 2013-01-21 13:50:31Z cokelaer $
+# $Id: plotLBodeFitness.R 4446 2014-03-12 15:35:32Z cokelaer $
 plotLBodeFitness <-function
 (
         cnolist,                    model,                        ode_parameters=NULL,
@@ -20,7 +20,11 @@ plotLBodeFitness <-function
         verbose=0,                     transfer_function=3,        reltol=1e-4,
         atol=1e-3,                    maxStepSize=Inf,             maxNumSteps=100000,
         maxErrTestsFails=50,        plot_index_signals=NULL,    plot_index_experiments=NULL,
-        plot_index_cues=NULL,         colormap="heat"
+        plot_index_cues=NULL,         colormap="heat",
+        plotParams=list(margin=0.1, width=15, height=12,
+                  cmap_scale=1, cex=1.6, ymin=NULL), initial_state=0.1
+  
+
 )
 {
 
@@ -37,7 +41,7 @@ plotLBodeFitness <-function
     sim_data=getLBodeDataSim(cnolist,model,
             ode_parameters,indices,timeSignals,time,verbose,
             transfer_function,reltol,atol,maxStepSize,maxNumSteps,
-            maxErrTestsFails);
+            maxErrTestsFails, initial_state=initial_state);
 
     times=cnolist$timeSignals;
 
@@ -67,7 +71,7 @@ plotLBodeFitness <-function
     } else{
         plotOptimResultsPan(sim_data, yInterpol=NULL, xCoords=NULL,
              CNOlist=CNOlist(cnolist), formalism="ode", pdf=FALSE,
-             pdfFileName="", tPt=NULL)
+             plotParams=plotParams,pdfFileName="", tPt=NULL)
     }
 
   return(sim_data);
