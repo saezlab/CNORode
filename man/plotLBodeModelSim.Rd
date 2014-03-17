@@ -76,6 +76,9 @@
  	\item{nsplit}{
 		In case the large plot options is selected define how many subplots will exist. Default is 4.
 	}
+    \item{show}{
+        show the error (defaults to TRUE)
+    }
 }
 
 \value{

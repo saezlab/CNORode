@@ -32,9 +32,8 @@
 	  \item{indices}{
 		Indices to map data in the model. Obtained with indexFinder function from CellNOptR. 
 	}
-	\item{timeSignals}{
-		An array containing a different timeSignals. If you use this argument, it will also
-		modify the dimensions from valueSignals.
+	\item{adjMatrix}{
+		The adjacency matrix. Recomputed if not provided
 	}
   	\item{time}{
 		An integer with the index of the time point to start the simulation. Default is 1.
