@@ -2,6 +2,9 @@
 .Rhistory
 .Rapp.history
 
+# Ignore vim swap files
+*.swp
+
 # Session Data files
 .RData
 
@@ -14,9 +17,13 @@
 # Output files from R CMD check
 /*.Rcheck/
 
+# Compiled files
+/src/*.o
+
 # RStudio files
 .Rproj.user/
-.Rproj
+*.Rproj
+.Rbuildignore
 
 # produced vignettes
 vignettes/*.html
@@ -32,3 +39,4 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+.Rproj.user

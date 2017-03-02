@@ -1,0 +1,15 @@
+Package: CNORode2017
+Type: Package
+Title: Modified version of ODE add-on to CellNOptR
+Version: 1.6.0
+Date: 2017-02-28
+Author: David Henriques, Thomas Cokelaer, Federica Eduati
+Maintainer: Federica Eduati <federica.eduati@gmail.com>
+biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics,
+        TimeCourse
+Description: modified version of the ODE add-on to CellNOptR
+License: GPL-3
+LazyLoad: yes
+Depends: CellNOptR , genalg
+Enhances: MEIGOR
+Packaged: 2015-01-23 16:07:22 UTC; peterb
