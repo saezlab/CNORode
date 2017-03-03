@@ -3,8 +3,8 @@ This is modified version of [CNORode](https://www.bioconductor.org/packages/rele
 
 ### Basic info on logic based ODE and CNORode
 For an introduction on logic based ODE we recomment reading the original publication (Wittmann et al., BMC Syst Biol., 2009)[add link]. Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function ($$B_i$$), which allows to have a continuous description of the behaveour of the species of interest both in time and in state. Each species $$i$$ is described by an ODE:
-$$\dot x_i=\tau_i(B_i(f(x_{i1}), f(x_{i2}),... ,f(x_{iN}))-x_i)$$
-where $$\tau_i$$ is the life-time of the species and $$x_{i1}, x_{i2}, ..., x_{iN}$$ are its $$N$$ regulators. Each regulation is described by a transfer function $$f(x_{ij})$$ which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
+$\dot x_i=\tau_i(B_i(f(x_{i1}), f(x_{i2}),... ,f(x_{iN}))-x_i)$
+where $\tau_i$ is the life-time of the species and $$x_{i1}, x_{i2}, ..., x_{iN}$$ are its $$N$$ regulators. Each regulation is described by a transfer function $$f(x_{ij})$$ which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
 
 ### New features of CNORode2017
 Differences with respect to the original CNORode package are described below.
