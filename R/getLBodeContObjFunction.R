@@ -20,7 +20,8 @@ getLBodeContObjFunction<-
   indices=NULL,           time=1,                   verbose=0,
   transfer_function=3,    reltol=1e-4,            atol=1e-3,
   maxStepSize=Inf,        maxNumSteps=100000,        maxErrTestsFails=50,
-  nan_fac=1, lambda=0, boot_seed=sample(1:10000,1)
+  nan_fac=1, lambda_tau=0, lambda_k=0, bootstrap=F,
+  SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1)
 )
   {
   
@@ -54,35 +55,37 @@ getLBodeContObjFunction<-
     sim<-as.vector(unlist(lapply(sim,function(x) x[,indices1$signals])));
     measured_values<-as.vector(unlist(lapply(cnolist1$valueSignals,function(x)x)));
     
-    res_boot<-(sim-measured_values)^2
-    set.seed(boot_seed)
-    res_boot<-sample(res_boot, length(res_boot), replace=T)
-    error<-sum(res_boot, na.rm = T)
+    # do bootstrap if required
+    if (bootstrap==T){
+      res_boot<-(sim-measured_values)^2
+      set.seed(boot_seed)
+      res_boot<-sample(res_boot, length(res_boot), replace=T)
+      error<-sum(res_boot, na.rm = T)
+      print(sample(1:5, 5, replace=T))
+    }else{
+      error<-sum((sim-measured_values)^2, na.rm = T)
+    }
     
     NaNs_sim=which(is.na(sim));
     
-    # print(sample(1:5, 5, replace=T))
-    
-    lambda_k<-lambda
-    lambda_tau<-0
     
     NApenalty<-length(NaNs_sim)*nan_fac1
-    SSpenalty<-10*sum(temp[[length(cnolist$timeSignals)+1]]^2)
-    SSbasalPenalty<-1000*sum(temp[[length(cnolist$timeSignals)+2]][1,]^2)
+    SSpenalty<-SSpenalty_fac*sum(temp[[length(cnolist$timeSignals)+1]]^2)
+    SScontrolPenalty<-SScontrolPenalty_fac*sum(temp[[length(cnolist$timeSignals)+2]][1,]^2)
     L1reg_k<-lambda_k*(sum(abs(ode_parameters1$parValues[ode_parameters1$index_k])))
     L1reg_tau<-lambda_tau*(sum(abs(ode_parameters1$parValues[ode_parameters1$index_tau])))
     L1reg<-L1reg_k+L1reg_tau
     
-    res=error+length(NaNs_sim)*nan_fac1+SSpenalty+SSbasalPenalty+L1reg_k;
+    res=error+NApenalty+SSpenalty+SScontrolPenalty+L1reg;
     
     cat("res =", res, "\n",
         "NA penalty = ", NApenalty, "\n",
         "error =", error, "\n",
-        "steady state penalty, ", SSpenalty, "\n",
-        "control steady state penalty", SSbasalPenalty, "\n",
-        "L1-reg: lambda =", lambda, "- P penalty (only tau)", L1reg_tau, "\n",
-        "L1-reg: lambda =", lambda, "- P penalty (only k)", L1reg_k, "\n",
-        "L1-reg: lambda =", lambda, "- P penalty (all)", L1reg, "\n",
+        "steady state penalty ( fac =", SSpenalty_fac, ") = ", SSpenalty, "\n",
+        "control steady state penalty ( fac =", SScontrolPenalty_fac, ") = ",  SScontrolPenalty, "\n",
+        "L1-reg: lambda =", lambda_tau, "- P penalty (only tau)", L1reg_tau, "\n",
+        "L1-reg: lambda =", lambda_k, "- P penalty (only k)", L1reg_k, "\n",
+        "L1-reg: P penalty (total)", L1reg, "\n",
         "--------\n")
 
     if(is.nan(res) || is.na(res))res=1e10;
