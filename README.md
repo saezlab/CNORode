@@ -75,6 +75,7 @@ A penalty term proportional to the L1-norm of the parameters has been added to t
 | ***lambda_tau*** | 0 | 0.0001-0.1 |  Regularisation factor *&lambda;<sub>&tau;</sub>* to be used for parameters *&tau;<sub>i</sub>*. |
 | ***lambda_k*** | 0 | 0.0001-0.1 | Regularisation factor *&lambda;<sub>k</sub>* to be used for parameters *k<sub>ij</sub>*. |
 | ***SSpenalty_fac*** | 0 | 10 | Penalty factor for nor reaching steady state withing time range of experimental data |
+| ***SScontrolPenalty_fac*** | 0 | 1000 | Penalty factor for nor reaching steady state for control (unperturbed) condition. Control condition is assumed to be in the first row of the MIDAS or CNOlist. |
 | ***bootstrap*** | FALSE |  |  If *bootrstrap=TRUE* experimental data used in the optimisation are randomly sampled with replacement. If this option is selected the optimisation should be repeated multiple times (&ge; 100) to obtain a distribution of the estimated parameters. |
 | ***boot_seed*** | sample(1:10000,1) |  |  Seed to be used for random sampling if *bootstrap=TRUE*. |
 
