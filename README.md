@@ -88,13 +88,23 @@ paramsSSm$SScontrolPenalty_fac=1000
 
 ##### 4. Bootstrap
 
-This feature allows to derive confidence intervals (and distribution) of the estimated parameters by performing the optimisation multiple times with random sampling (with replacement) of the experimental data used for optimisation. If this option is selected, the user should repeat the optimisation multiple times (recommended at least 100) to have a bootstrapped distribution. By default, each time the optimisation is run with the bootstrapping option, a different seed for the random sampling is randomly selected (seed can also be provided as user input).
+This feature allows to perform the optimisation with random resampling (with replacement) of the experimental data. With default option for *boot_seed*, a random seed for the random sampling is selected each time the optimisation is run, but the seed can also be provided as user input.
 
 ```R
 # select bootstrapping option
 paramsSSm$bootstrap=TRUE
 # default random assignment of the seed for random sampling
 paramsSSm$boot_seed=sample(1:10000,1)
+```
+
+When using the bootsrap, the user should repeat the optimisation multiple times (recommended at least 100) to derive a bootstrapped distribution of the estimated parameters. Here below a simple code for small network, for medium or large network parallelisation (preferably on cluster) is recommended.
+
+```R
+# select bootstrapping option
+opt_pars<-lapply(seq(1:100), function(x){
+  paramsSSm$boot_seed=x
+  parEstimationLBode(cnolist, model, method="essm", ode_parameters=ode_parameters, paramsSSm=paramsSSm)
+})
 ```
 
 ### Summary of new/modified arguments for *paramsSSm*
