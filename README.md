@@ -97,7 +97,7 @@ paramsSSm$bootstrap=TRUE
 paramsSSm$boot_seed=sample(1:10000,1)
 ```
 
-When using the bootsrap, the user should repeat the optimisation multiple times (recommended at least 100) to derive a bootstrapped distribution of the estimated parameters. Here below a simple code for small network, for medium or large network parallelisation (preferably on cluster) is recommended.
+When using the bootsrap, the user should repeat the optimisation multiple times (recommended at least 100) to derive a bootstrapped distribution of the estimated parameters. Here below a simple code for small network, while for medium or large networks parallelisation (preferably on cluster) is strongly recommended.
 
 ```R
 # select bootstrapping option
