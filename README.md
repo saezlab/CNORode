@@ -60,20 +60,36 @@ paramsSSm$transfer_function=4
 
 ##### 2. L1 regularisation
 A penalty term proportional to the L1-norm of the parameters has been added to the objective function in order to induce sparsity in the network. The balance between prioritising good fit or sparse model is regulated by a tunable term *&lambda;* which can be empirically selected testing the effect of different values on model fit and model sparsity.
-
 A regularisation factor *&lambda;* can be assigned separately to parameters *&tau;<sub>i</sub>* and *k<sub>ij</sub>* as follows:
+
 
 ```R
 # for parameters tau
 paramsSSm$lambda_tau=0.01
+# for parameters k
 paramsSSm$lambda_k=0.001
 ```
 
 ##### 3. Steady state penalty
+An additional penalty term can be considered in the objective function to penalise parameters sets for which the simulation does not reach steady state within the time range of the measured experimental data. This is expecially recommended to match biological assuptions when only few time points are available in the experimental data and have been chosen cosidering that the biological system under investigation have reached a semi steady state. A different (tipically higher) penalty can be given to the control (unperturbed) condition in order to favour that the system remains at basal condition when no perturbatiosn are applied.
 
+```R
+# steady state penalty
+paramsSSm$SSpenalty_fac=10
+# additional penalty for control condition (assumed to be first row of MIDAS)
+paramsSSm$SScontrolPenalty_fac=1000
+```
 
 ##### 4. Bootstrap
 
+This feature allows to derive confidence intervals (and distribution) of the estimated parameters by performing the oprimisation multiple times with random sampling (with replacement) of the experimental data used for optimisation. If this option is selected, the user should repeat the optimisation multiple times (recommended at least 100) to have a bootstrapped distribution. By default, each time the optimisation is run with the bootstrapping option, a different seed for the random sampling is randomly selected (seed can also be provided as user input).
+
+```R
+# select bootstrapping option
+paramsSSm$bootstrap=TRUE
+# default random assignment of the seed for random sampling
+paramsSSm$boot_seed=sample(1:10000,1)
+```
 
 ### Summary of new/modified argumentrs for *paramsSSm*
 
