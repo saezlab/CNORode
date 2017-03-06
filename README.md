@@ -1,9 +1,9 @@
 # CNORode2017
-This is modified version of [CNORode](https://www.bioconductor.org/packages/release/bioc/html/CNORode.html) which is an add-on to [CellNOptR](https://www.bioconductor.org/packages/release/bioc/html/CellNOptR.html). We refer to the [*vignette*](https://www.bioconductor.org/packages/release/bioc/vignettes/CNORode/inst/doc/CNORode-vignette.pdf) for learning usage of CNORode, and we will describe here below only added features. For more general information about the CellNOpt project visit: http://www.cellnopt.org/.
+This is a modified version of [CNORode](https://www.bioconductor.org/packages/release/bioc/html/CNORode.html) which is an add-on to [CellNOptR](https://www.bioconductor.org/packages/release/bioc/html/CellNOptR.html). We refer to the [*vignette*](https://www.bioconductor.org/packages/release/bioc/vignettes/CNORode/inst/doc/CNORode-vignette.pdf) for learning usage of CNORode, and we will describe here below only added features. For more general information about the CellNOpt project visit: http://www.cellnopt.org/.
 
 ### How to install
 
-*CNORode2017* requires *CellNOptR* and *MEIGOR* which are available in Bioconductior and can be installed typing:
+*CNORode2017* requires *CellNOptR* and *MEIGOR* which are available in Bioconductor and can be installed typing:
 
 ```R
 source("https://bioconductor.org/biocLite.R")
@@ -26,7 +26,7 @@ library(MEIGOR)
 library(CNORode2017)
 ```
 
-This is because *CNORode* is a dependency of *MEIGOR* and has same function names as *CNORode2017*, so original *CNORode* functions will be prioritized when calling the optimisation function if *CNORode* is loaded after *CNORode2017*.
+This is because *CNORode* is a dependency of *MEIGOR* and has same function names as *CNORode2017*, so original *CNORode* functions will be prioritized when calling the optimisation function if *MEIGOR* (and thus *CNORode*) is loaded after *CNORode2017*.
 
 
 ### New features of *CNORode2017*
@@ -41,7 +41,7 @@ opt_pars=parEstimationLBode(cnolist,model, method="essm", ode_parameters=ode_par
 Using default *paramsSSm* should get to the same results as the original *CNORode*.
 
 ### Basic info on logic based ODE and CNORode
-For an introduction on logic based ODE we recomment reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaveour of the species of interest both in time and in state. Each species *i* is described by an ODE:
+For an introduction on logic based ODE we recommend reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaviour of the species of interest both in time and in state. Each species *x<sub>i</sub>* is described by an ODE:
 
 *d(x<sub>i</sub>)/dt=&tau;<sub>i</sub>(B<sub>i</sub>(f(x<sub>i1</sub>), f(x<sub>i2</sub>), ..., f(x<sub>iN</sub>))-x<sub>i</sub>)*
 
@@ -49,9 +49,9 @@ where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x
 
 
 ##### 1. New transfer function
-A new transfer function *f(x<sub>ij</sub>)* was introduces to have a more streightforward interpretability of the parameters in terms of functionlity of the edges. For the previously implemented transfer functions we refer to [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/) and [(Terfve et al., BMC Syst Biol, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3605281/). The new transfer function is characterized by two parameters (*k<sub>ij</sub>* and *n<sub>ij</sub>*) and mantains the previously introduced sigmoidal shape, but allows to describe the case of "no regulation" when parameter *k<sub>ij</sub>=0*. For fixed *n<sub>ij</sub>*, increasing values of *k<sub>ij</sub>* correspond to increasing strength of the regulation.
+A new transfer function *f(x<sub>ij</sub>)* was introduces to have a more straightforward interpretability of the parameters in terms of functionality of the edges. For the previously implemented transfer functions we refer to [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/) and [(Terfve et al., BMC Syst Biol, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3605281/). The new transfer function is characterized by two parameters (*k<sub>ij</sub>* and *n<sub>ij</sub>*) and mantains the previously introduced sigmoidal shape, but allows to describe the case of "no regulation" when parameter *k<sub>ij</sub>=0*. For fixed *n<sub>ij</sub>*, increasing values of *k<sub>ij</sub>* correspond to increasing strength of the regulation.
 
-Previously implemented transfer trasfer functions are passed as numberes: 1 (linear), 2 (Hill) and 3 (Normalised Hill). The new transfer function has been assigned value 4 and can be passed as *paramsSSm* argument as follows:
+Previously implemented transfer functions are passed as numberes: 1 (linear), 2 (Hill) and 3 (Normalised Hill). The new transfer function has been assigned value 4 and can be passed as *paramsSSm* argument as follows:
 
 ```R
 # use new transfer functions (see help for other transfer functions)
@@ -77,7 +77,7 @@ paramsSSm$lambda_k=0.001
 ```
 
 ##### 3. Steady state penalty
-An additional penalty term can be considered in the objective function to penalise parameters sets for which the simulation does not reach steady state within the time range of the measured experimental data. This is expecially recommended to match biological assuptions when only few time points are available in the experimental data and have been chosen cosidering that the biological system under investigation have reached a semi steady state. A different (tipically higher) penalty can be given to the control (unperturbed) condition in order to favour that the system remains at basal condition when no perturbatiosn are applied.
+An additional penalty term can be considered in the objective function to penalise parameter sets for which the simulation does not reach steady state within the time range of the measured experimental data. This is especially recommended to match biological assumptions when only few time points are available in the experimental data and have been chosen considering that the biological system under investigation have reached a semi steady state. A different (typically higher) penalty can be given to the control (unperturbed) condition in order to favour that the system remains at basal condition when no perturbations are applied.
 
 ```R
 # steady state penalty
@@ -88,7 +88,7 @@ paramsSSm$SScontrolPenalty_fac=1000
 
 ##### 4. Bootstrap
 
-This feature allows to derive confidence intervals (and distribution) of the estimated parameters by performing the oprimisation multiple times with random sampling (with replacement) of the experimental data used for optimisation. If this option is selected, the user should repeat the optimisation multiple times (recommended at least 100) to have a bootstrapped distribution. By default, each time the optimisation is run with the bootstrapping option, a different seed for the random sampling is randomly selected (seed can also be provided as user input).
+This feature allows to derive confidence intervals (and distribution) of the estimated parameters by performing the optimisation multiple times with random sampling (with replacement) of the experimental data used for optimisation. If this option is selected, the user should repeat the optimisation multiple times (recommended at least 100) to have a bootstrapped distribution. By default, each time the optimisation is run with the bootstrapping option, a different seed for the random sampling is randomly selected (seed can also be provided as user input).
 
 ```R
 # select bootstrapping option
@@ -97,20 +97,20 @@ paramsSSm$bootstrap=TRUE
 paramsSSm$boot_seed=sample(1:10000,1)
 ```
 
-### Summary of new/modified argumentrs for *paramsSSm*
+### Summary of new/modified arguments for *paramsSSm*
 
 | Name | Default | Suggested | Description |
 | :------------ | :---------- | :---------- | :---------- |
 | ***transfer_function*** | 3 | 4 |  Defines which transfer function (*f(x<sub>ij</sub>)*) to use. Default (*transfer_function=3*) is Normalised Hill. New transfer function is *transfer_function=4*. |
 | ***lambda_tau*** | 0 | 0.0001-0.1 |  Regularisation factor *&lambda;<sub>&tau;</sub>* to be used for parameters *&tau;<sub>i</sub>*. |
 | ***lambda_k*** | 0 | 0.0001-0.1 | Regularisation factor *&lambda;<sub>k</sub>* to be used for parameters *k<sub>ij</sub>*. |
-| ***SSpenalty_fac*** | 0 | 10 | Penalty factor for nor reaching steady state withing time range of experimental data |
-| ***SScontrolPenalty_fac*** | 0 | 1000 | Penalty factor for nor reaching steady state for control (unperturbed) condition. Control condition is assumed to be in the first row of the MIDAS or CNOlist. |
-| ***bootstrap*** | FALSE |  |  If *bootrstrap=TRUE* experimental data used in the optimisation are randomly sampled with replacement. If this option is selected the optimisation should be repeated multiple times (&ge; 100) to obtain a distribution of the estimated parameters. |
+| ***SSpenalty_fac*** | 0 | 10 | Penalty factor for not reaching steady state within time range of experimental data |
+| ***SScontrolPenalty_fac*** | 0 | 1000 | Penalty factor for not reaching steady state for control (unperturbed) condition. Control condition is assumed to be in the first row of the MIDAS or CNOlist. |
+| ***bootstrap*** | FALSE |  |  If *bootstrap=TRUE* experimental data used in the optimisation are randomly sampled with replacement. If this option is selected the optimisation should be repeated multiple times (&ge; 100) to obtain a distribution of the estimated parameters. |
 | ***boot_seed*** | sample(1:10000,1) |  |  Seed to be used for random sampling if *bootstrap=TRUE*. |
 
 ### Example
-A working example is available [here](https://github.com/saezlab/CPT_QSPtutorial/blob/master/CellNOptR_optimisation.R) and data and network (PKN) used are avilable in the same reposotory (https://github.com/saezlab/CPT_QSPtutorial).
+A working example is available [here](https://github.com/saezlab/CPT_QSPtutorial/blob/master/CellNOptR_optimisation.R) and data and network (PKN) used are available in the same repository (https://github.com/saezlab/CPT_QSPtutorial).
 
 ### Reference
 The described additions to the CNORode package has been developed for the following publication (available as a preprint in [BioRxiv](http://biorxiv.org/content/early/2016/12/16/094755)):
