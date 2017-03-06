@@ -17,7 +17,8 @@
 \usage{
 	getLBodeContObjFunction(cnolist, model, ode_parameters, indices=NULL, time = 1, 
 	verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf, 
-	maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+	maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1, lambda_tau=0, lambda_k=0,
+	bootstrap=F, SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1))
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -65,6 +66,31 @@
 		A penalty for each data point the model is not able to simulate. We recommend higher than
 		0 and smaller that 1.
 	}
+	  \item{lambda_tau}{
+		Tunable regularisation parameters to penalise L1-norm of parameters tau and induce sparsity.
+		We recommend testing values between 0 and 100 (in log scale) to find best compromise between
+		good fit and sparse model. Default =0, corresponding to no regularisation.
+	}
+	  \item{lambda_k}{
+		Tunable regularisation parameters to penalise L1-norm of parameters k and induce sparsity.
+		We recommend testing values between 0 and 100 (in log scale) to find best compromise between
+		good fit and sparse model. Default =0, corresponding to no regularisation.
+	}
+	  \item{bootstrap}{
+		If set to TRUE performs random sampling with replacement of the measurements used in the
+		optimisation (to be run multiple times to get bootstrapped distribution of parameters).
+		Default =FALSE, no bootstrapping.
+	}
+	  \item{SSpenalty_fac}{
+		Penalty factor for penalising solutions which do not reach steady state. Default =0.
+	}
+	  \item{SScontrolPenalty_fac}{
+		Penalty factor for penalising solutions for which the control (unperturbed) condition
+		(assumed to be first row) does not reach steady state. Default =0.
+	}
+	  \item{boot_seed}{
+		Seed used for random sampling if bootstrap=TRUE. Default chose random seed between 0 and 10000
+	}
 }
 
 \details{
@@ -79,7 +105,7 @@
 }
 
 \author{
-	David Henriques, Thomas Cokelaer
+	David Henriques, Thomas Cokelaer, Federica Eduati
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
