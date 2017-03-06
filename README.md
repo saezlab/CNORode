@@ -1,13 +1,6 @@
 # CNORode2017
 This is modified version of [CNORode](https://www.bioconductor.org/packages/release/bioc/html/CNORode.html) which is an add-on to [CellNOptR](https://www.bioconductor.org/packages/release/bioc/html/CellNOptR.html). We refer to the [*vignette*](https://www.bioconductor.org/packages/release/bioc/vignettes/CNORode/inst/doc/CNORode-vignette.pdf) for learning usage of CNORode, and we will describe here below only added features. For more general information about the CellNOpt project visit: http://www.cellnopt.org/.
 
-### Basic info on logic based ODE and CNORode
-For an introduction on logic based ODE we recomment reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaveour of the species of interest both in time and in state. Each species *i* is described by an ODE:
-
-*d(x<sub>i</sub>)/dt=&tau;<sub>i</sub>(B<sub>i</sub>(f(x<sub>i1</sub>), f(x<sub>i2</sub>), ..., f(x<sub>iN</sub>))-x<sub>i</sub>)*
-
-where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x<sub>i2</sub>, ... x<sub>iN</sub>* are its *N* regulators. Each regulation is described by a transfer function *f(x<sub>ij</sub>)* which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
-
 ### How to install
 
 *CNORode2017* requires *CellNOptR* and *MEIGOR* which are available in Bioconductior and can be installed typing:
@@ -36,12 +29,24 @@ library(CNORode2017)
 This is because CNORode is a dependency of MEIGOR and has same function names as CNORode2017 so it will be prioritizes when calling the optimisation function if loaded after CNORode2017.
 
 
-### New features of CNORode2017
-Differences with respect to the original CNORode package are described below. All features can be used in the *parEstimationLBode()* function for parameters estimation passing them using the *paramsSSm* argument:
+### New features of *CNORode2017*
+Differences with respect to the original CNORode package are described below. All new features can be used in the *parEstimationLBode()* function for parameters estimation passing them using the *paramsSSm* argument:
 
 ```R
 # sets optimisation parameters to default values
 paramsSSm=defaultParametersSSm()
+# passed to parameter estimation function as follows
+opt_pars=parEstimationLBode(cnolist,model, method="essm", ode_parameters=ode_parameters, paramsSSm=paramsSSm)
+```
+
+
+### Basic info on logic based ODE and CNORode
+For an introduction on logic based ODE we recomment reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaveour of the species of interest both in time and in state. Each species *i* is described by an ODE:
+
+*d(x<sub>i</sub>)/dt=&tau;<sub>i</sub>(B<sub>i</sub>(f(x<sub>i1</sub>), f(x<sub>i2</sub>), ..., f(x<sub>iN</sub>))-x<sub>i</sub>)*
+
+where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x<sub>i2</sub>, ... x<sub>iN</sub>* are its *N* regulators. Each regulation is described by a transfer function *f(x<sub>ij</sub>)* which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
+
 ```
 
 ##### 1. New transfer function
@@ -50,8 +55,6 @@ A new transfer function *f(x<sub>ij</sub>)* was introduces to have a more streig
 The transfer function to be used in the *parEstimationLBode()* function for parameters estimation, is passed using the *paramsSSm* argument.
 
 ```R
-# sets optimisation parameters to default values
-paramsSSm=defaultParametersSSm()
 # use new transfer functions (see help for other transfer functions)
 paramsSSm$transfer_function=4
 ```
