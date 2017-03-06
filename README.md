@@ -100,7 +100,7 @@ paramsSSm$boot_seed=sample(1:10000,1)
 When using the bootsrap, the user should repeat the optimisation multiple times (recommended at least 100) to derive a bootstrapped distribution of the estimated parameters. Here below a simple code that can be used for small networks, while for medium or large networks parallelisation (preferably on cluster) is strongly recommended.
 
 ```R
-# select bootstrapping option
+# 100 bootsrap repetitions
 opt_pars<-lapply(seq(1:100), function(x){
   paramsSSm$boot_seed=x
   parEstimationLBode(cnolist, model, method="essm", ode_parameters=ode_parameters, paramsSSm=paramsSSm)
