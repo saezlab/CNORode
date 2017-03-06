@@ -26,11 +26,11 @@ library(MEIGOR)
 library(CNORode2017)
 ```
 
-This is because CNORode is a dependency of MEIGOR and has same function names as CNORode2017 so it will be prioritizes when calling the optimisation function if loaded after CNORode2017.
+This is because *CNORode* is a dependency of *MEIGOR* and has same function names as *CNORode2017*, so original *CNORode* functions will be prioritized when calling the optimisation function if *CNORode* is loaded after *CNORode2017*.
 
 
 ### New features of *CNORode2017*
-Differences with respect to the original CNORode package are described below. All new features can be used in the *parEstimationLBode()* function for parameters estimation passing them using the *paramsSSm* argument (can be used only when using *essm* method):
+Differences with respect to the original CNORode package are described below. All new features can be used in the *parEstimationLBode()* function for parameters estimation and can be passed using the *paramsSSm* argument (can be used only when using *essm* method):
 
 ```R
 # sets optimisation parameters to default values
@@ -56,6 +56,12 @@ Previously implemented transfer trasfer functions are passed as numberes: 1 (lin
 ```R
 # use new transfer functions (see help for other transfer functions)
 paramsSSm$transfer_function=4
+```
+
+Same when running the simulation:
+
+```R
+simulatedData=plotLBodeFitness(cnolist, model, transfer_function=4, ode_parameters=opt_pars)
 ```
 
 ##### 2. L1 regularisation
