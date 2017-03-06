@@ -38,7 +38,7 @@ paramsSSm=defaultParametersSSm()
 # passed to parameter estimation function as follows
 opt_pars=parEstimationLBode(cnolist,model, method="essm", ode_parameters=ode_parameters, paramsSSm=paramsSSm)
 ```
-
+Using default *paramsSSm* should get to the same results as the original *CNORode*.
 
 ### Basic info on logic based ODE and CNORode
 For an introduction on logic based ODE we recomment reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaveour of the species of interest both in time and in state. Each species *i* is described by an ODE:
@@ -51,18 +51,26 @@ where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x
 ##### 1. New transfer function
 A new transfer function *f(x<sub>ij</sub>)* was introduces to have a more streightforward interpretability of the parameters in terms of functionlity of the edges. For the previously implemented transfer functions we refer to [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/) and [(Terfve et al., BMC Syst Biol, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3605281/). The new transfer function is characterized by two parameters (*k<sub>ij</sub>* and *n<sub>ij</sub>*) and mantains the previously introduced sigmoidal shape, but allows to describe the case of "no regulation" when parameter *k<sub>ij</sub>=0*. For fixed *n<sub>ij</sub>*, increasing values of *k<sub>ij</sub>* correspond to increasing strength of the regulation.
 
-The transfer function to be used in the *parEstimationLBode()* function for parameters estimation, is passed using the *paramsSSm* argument.
+Previously implemented transfer trasfer functions are passed as numberes: 1 (linear), 2 (Hill) and 3 (Normalised Hill). The new transfer function has been assigned value 4 and can be passed as *paramsSSm* argument as follows:
 
 ```R
 # use new transfer functions (see help for other transfer functions)
 paramsSSm$transfer_function=4
 ```
 
-
 ##### 2. L1 regularisation
-A penalty term proportional to the L1-norm of the parameters has been added to the objective function in order to induce sparsity in the network. 
+A penalty term proportional to the L1-norm of the parameters has been added to the objective function in order to induce sparsity in the network. The balance between prioritising good fit or sparse model is regulated by a tunable term *&lambda;* which can be empirically selected testing the effect of different values on model fit and model sparsity.
+
+A regularisation factor *&lambda;* can be assigned separately to parameters *&tau;<sub>i</sub>* and *k<sub>ij</sub>* as follows:
+
+```R
+# for parameters tau
+paramsSSm$lambda_tau=0.01
+paramsSSm$lambda_k=0.001
+```
 
 ##### 3. Steady state penalty
+
 
 ##### 4. Bootstrap
 
