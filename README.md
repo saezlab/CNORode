@@ -53,7 +53,7 @@ A new transfer function *f(x<sub>ij</sub>)* was introduces to have a more straig
 Previously implemented transfer functions are passed as numberes: 1 (linear), 2 (Hill) and 3 (Normalised Hill). The new transfer function has been assigned value 4 and can be passed as *paramsSSm* argument as follows:
 
 ```R
-# use new transfer functions (see help for other transfer functions)
+# use new transfer function (see help for other transfer functions)
 paramsSSm$transfer_function=4
 ```
 
