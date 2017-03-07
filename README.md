@@ -48,7 +48,7 @@ For an introduction on logic based ODE we recommend reading the original publica
 where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x<sub>i2</sub>, ... x<sub>iN</sub>* are its *N* regulators. Each regulation is described by a transfer function *f(x<sub>ij</sub>)* which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
 
 
-##### 1. New transfer function
+#### 1. New transfer function
 A new transfer function *f(x<sub>ij</sub>)* was introduces to have a more straightforward interpretability of the parameters in terms of functionality of the edges. For the previously implemented transfer functions we refer to [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/) and [(Terfve et al., BMC Syst Biol, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3605281/). The new transfer function is characterized by two parameters (*k<sub>ij</sub>* and *n<sub>ij</sub>*) and mantains the previously introduced sigmoidal shape, but allows to describe the case of "no regulation" when parameter *k<sub>ij</sub>=0*. For fixed *n<sub>ij</sub>*, increasing values of *k<sub>ij</sub>* correspond to increasing strength of the regulation.
 
 Previously implemented transfer functions are passed as numberes: 1 (linear), 2 (Hill) and 3 (Normalised Hill). The new transfer function has been assigned value 4 and can be passed as *paramsSSm* argument as follows:
@@ -64,7 +64,7 @@ Same when running the simulation:
 simulatedData=plotLBodeFitness(cnolist, model, transfer_function=4, ode_parameters=opt_pars)
 ```
 
-##### 2. L1 regularisation
+#### 2. L1 regularisation
 A penalty term proportional to the L1-norm of the parameters has been added to the objective function in order to induce sparsity in the network. The balance between prioritising good fit or sparse model is regulated by a tunable term *&lambda;* which can be empirically selected testing the effect of different values on model fit and model sparsity.
 A regularisation factor *&lambda;* can be assigned separately to parameters *&tau;<sub>i</sub>* and *k<sub>ij</sub>* as follows:
 
@@ -76,7 +76,7 @@ paramsSSm$lambda_tau=0.01
 paramsSSm$lambda_k=0.001
 ```
 
-##### 3. Steady state penalty
+#### 3. Steady state penalty
 An additional penalty term can be considered in the objective function to penalise parameter sets for which the simulation does not reach steady state within the time range of the measured experimental data. This is especially recommended to match biological assumptions when only few time points are available in the experimental data and have been chosen considering that the biological system under investigation have reached a semi steady state. A different (typically higher) penalty can be given to the control (unperturbed) condition in order to favour that the system remains at basal condition when no perturbations are applied.
 
 ```R
@@ -86,7 +86,7 @@ paramsSSm$SSpenalty_fac=10
 paramsSSm$SScontrolPenalty_fac=1000
 ```
 
-##### 4. Bootstrap
+#### 4. Bootstrap
 
 This feature allows to perform the optimisation with random resampling (with replacement) of the experimental data. With default option for *boot_seed*, a random seed for the random sampling is selected each time the optimisation is run, but the seed can also be provided as user input.
 
