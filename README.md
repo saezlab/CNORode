@@ -28,6 +28,12 @@ library(CNORode2017)
 
 This is because *CNORode* is a dependency of *MEIGOR* and has same function names as *CNORode2017*, so original *CNORode* functions will be prioritized when calling the optimisation function if *MEIGOR* (and thus *CNORode*) is loaded after *CNORode2017*.
 
+### Basic info on logic based ODE and CNORode
+For an introduction on logic based ODE we recommend reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaviour of the species of interest both in time and in state. Each species *x<sub>i</sub>* is described by an ODE:
+
+*d(x<sub>i</sub>)/dt=&tau;<sub>i</sub>(B<sub>i</sub>(f(x<sub>i1</sub>), f(x<sub>i2</sub>), ..., f(x<sub>iN</sub>))-x<sub>i</sub>)*
+
+where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x<sub>i2</sub>, ... x<sub>iN</sub>* are its *N* regulators. Each regulation is described by a transfer function *f(x<sub>ij</sub>)* which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
 
 ### New features of *CNORode2017*
 Differences with respect to the original CNORode package are described below. All new features can be used in the *parEstimationLBode()* function for parameters estimation and can be passed using the *paramsSSm* argument (can be used only when using *essm* method):
@@ -39,13 +45,6 @@ paramsSSm=defaultParametersSSm()
 opt_pars=parEstimationLBode(cnolist,model, method="essm", ode_parameters=ode_parameters, paramsSSm=paramsSSm)
 ```
 Using default *paramsSSm* should get to the same results as the original *CNORode*.
-
-### Basic info on logic based ODE and CNORode
-For an introduction on logic based ODE we recommend reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaviour of the species of interest both in time and in state. Each species *x<sub>i</sub>* is described by an ODE:
-
-*d(x<sub>i</sub>)/dt=&tau;<sub>i</sub>(B<sub>i</sub>(f(x<sub>i1</sub>), f(x<sub>i2</sub>), ..., f(x<sub>iN</sub>))-x<sub>i</sub>)*
-
-where *&tau;<sub>i</sub>* is the life-time of the species and *x<sub>i1</sub>, x<sub>i2</sub>, ... x<sub>iN</sub>* are its *N* regulators. Each regulation is described by a transfer function *f(x<sub>ij</sub>)* which can be, for example, a linear relationsip or a sigmoidal (Hill like) curve.
 
 
 #### 1. New transfer function
