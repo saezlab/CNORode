@@ -61,7 +61,7 @@ getLBodeContObjFunction<-
       set.seed(boot_seed)
       res_boot<-sample(res_boot, length(res_boot), replace=T)
       error<-sum(res_boot, na.rm = T)
-      print(sample(1:5, 5, replace=T))
+      # print(sample(1:5, 5, replace=T))
     }else{
       error<-sum((sim-measured_values)^2, na.rm = T)
     }
@@ -78,16 +78,19 @@ getLBodeContObjFunction<-
     
     res=error+NApenalty+SSpenalty+SScontrolPenalty+L1reg;
     
-    cat("res =", res, "\n",
-        "NA penalty = ", NApenalty, "\n",
-        "error =", error, "\n",
-        "steady state penalty ( fac =", SSpenalty_fac, ") = ", SSpenalty, "\n",
-        "control steady state penalty ( fac =", SScontrolPenalty_fac, ") = ",  SScontrolPenalty, "\n",
-        "L1-reg: lambda =", lambda_tau, "- P penalty (only tau)", L1reg_tau, "\n",
-        "L1-reg: lambda =", lambda_k, "- P penalty (only k)", L1reg_k, "\n",
-        "L1-reg: P penalty (total)", L1reg, "\n",
-        "--------\n")
-
+    
+    if (verbose==T){
+      cat("res =", res, "\n",
+          "NA penalty = ", NApenalty, "\n",
+          "error =", error, "\n",
+          "steady state penalty ( fac =", SSpenalty_fac, ") = ", SSpenalty, "\n",
+          "control steady state penalty ( fac =", SScontrolPenalty_fac, ") = ",  SScontrolPenalty, "\n",
+          "L1-reg: lambda =", lambda_tau, "- P penalty (only tau)", L1reg_tau, "\n",
+          "L1-reg: lambda =", lambda_k, "- P penalty (only k)", L1reg_k, "\n",
+          "L1-reg: P penalty (total)", L1reg, "\n",
+          "--------\n")
+    }
+    
     if(is.nan(res) || is.na(res))res=1e10;
     
     return(res);
