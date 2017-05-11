@@ -19,6 +19,7 @@
 
 # Compiled files
 /src/*.o
+/src/*.so
 
 # RStudio files
 .Rproj.user/
