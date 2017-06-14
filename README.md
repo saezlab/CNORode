@@ -122,6 +122,6 @@ opt_pars<-lapply(seq(1:100), function(x){
 A working example is available [here](https://github.com/saezlab/CPT_QSPtutorial/blob/master/CellNOptR_optimisation.R) and data and network (PKN) used are available in the same repository (https://github.com/saezlab/CPT_QSPtutorial).
 
 ### Reference
-The described additions to the CNORode package have been developed for the following publication (available as a preprint in [BioRxiv](http://biorxiv.org/content/early/2016/12/16/094755)):
+The described additions to the CNORode package have been developed for the following [paper] (http://cancerres.aacrjournals.org/content/early/2017/06/05/0008-5472.CAN-17-0078.long):
 
-> F. Eduati, V. Doldàn-Martelli, B. Klinger,  T. Cokelaer, A. Sieber, F. Kogera,  M. Dorel,  M. J Garnett,  N. Blüthgen,  J. Saez-Rodriguez. Dissecting cancer resistance to therapies with cell-type-specific dynamic logic models. bioRxiv 094755 (2016) doi: https://doi.org/10.1101/094755
+> F. Eduati, V. Doldàn-Martelli, B. Klinger,  T. Cokelaer, A. Sieber, F. Kogera,  M. Dorel,  M. J Garnett,  N. Blüthgen,  J. Saez-Rodriguez.  Drug resistance mechanisms in colorectal cancer dissected with cell type-specific dynamic logic models. Cancer Research, 2017. Published OnlineFirst 7 April. DOI: 10.1158/0008-5472.CAN-17-0078
