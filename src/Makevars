@@ -1,1 +1,2 @@
-PKG_CFLAGS = -I./include -Wno-format-security
+PKG_CFLAGS = -I./include
+CFLAGS= -Wno-format-security
