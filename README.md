@@ -125,3 +125,5 @@ A working example is available [here](https://github.com/saezlab/CPT_QSPtutorial
 The described additions to the CNORode package have been developed for the following [paper](http://cancerres.aacrjournals.org/content/early/2017/06/05/0008-5472.CAN-17-0078.long):
 
 > F. Eduati, V. Doldàn-Martelli, B. Klinger,  T. Cokelaer, A. Sieber, F. Kogera,  M. Dorel,  M. J Garnett,  N. Blüthgen,  J. Saez-Rodriguez.  Drug resistance mechanisms in colorectal cancer dissected with cell type-specific dynamic logic models. Cancer Research, 2017. Published OnlineFirst 7 April. DOI: 10.1158/0008-5472.CAN-17-0078
+
+Here the link to [PKN] (https://github.com/saezlab/CRC-pathway-biomarkers/blob/master/data/base/PKN.sif) and [data] (https://github.com/saezlab/CRC-pathway-biomarkers/tree/master/data/processed/MIDAS) used in the publication. Other analysis used for the publication are also available in the same [repository] (https://github.com/saezlab/CRC-pathway-biomarkers). 
