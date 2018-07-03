@@ -26,9 +26,9 @@ parEstimationLBodeSSm <-function
 {
 
    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
-   tryCatch({library(MEIGOR)}, error=function(e){print("MEIGOR (essR) package not found.
-	SSm not available. Install the package and load it or try the Genetic Algorithm
-	optimiser instead.");return(ode_parameters);});
+   if(!require(MEIGOR)) stop("MEIGOR (essR) package not found.
+	SSm not available. Install the MEIGOR package and load it or try the Genetic Algorithm
+	optimiser instead.");
 
 
 	adjMat=incidence2Adjacency(model);
@@ -79,7 +79,7 @@ parEstimationLBodeSSm <-function
 	if(!is.null(local_solver))opts$local_solver=local_solver;
 	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;  
-	results=essR(problem,opts);
+	results=MEIGOR::essR(problem,opts);
 	ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;
 	ode_parameters$ssm_results=results;
 	return(ode_parameters);	
