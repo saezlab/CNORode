@@ -12,6 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
+#' @export
 parEstimationLBodeSSm <-function
 (
 		cnolist,				model,					ode_parameters=NULL,

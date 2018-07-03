@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: defaultParametersGA.R 3184 2013-01-21 13:50:31Z cokelaer $
+#' @export
 defaultParametersGA <-
  function(){
 

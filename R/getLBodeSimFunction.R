@@ -12,7 +12,8 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-
+#' @export
+#' @useDynLib CNORode sim_logic_ode
 getLBodeSimFunction <-function
 (
 		cnolist1,				model1,					adjMatrix1,

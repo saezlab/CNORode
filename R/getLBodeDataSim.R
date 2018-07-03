@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-
+#' @export
 getLBodeDataSim<-function
 (
 		cnolist,				    model,					ode_parameters=NULL,

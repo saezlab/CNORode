@@ -12,6 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
+#' @export
 getLBodeContObjFunction<-
   function
 (

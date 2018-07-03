@@ -12,6 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
+#' @export
 plotLBodeFitness <-function
 (
         cnolist,                    model,                        ode_parameters=NULL,

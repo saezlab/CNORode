@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: createLBodeContPars.R 3184 2013-01-21 13:50:31Z cokelaer $
+#' @export
 createLBodeContPars <-function
 (
         model,            LB_n=1,            LB_k=0.1,

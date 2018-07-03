@@ -6,9 +6,12 @@ Date: 2018-07-3
 Author: David Henriques, Thomas Cokelaer, Federica Eduati
 Maintainer: David Henriques <davidpcnet@hotmail.com>
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
-Description:  Logic based ordinary differential equation (ODE) add-on to CellNOptR.
-License: GPL-3
+Description: Logic based ordinary differential equation (ODE) add-on to
+    CellNOptR.
+License: file LICENSE
 LazyLoad: yes
-Depends: CellNOptR , genalg
+Depends:
+    CellNOptR,
+    genalg
 Enhances: MEIGOR
-
+RoxygenNote: 5.0.1

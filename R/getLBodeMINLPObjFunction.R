@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: getLBodeMINLPObjFunction.R 3184 2013-01-21 13:50:31Z cokelaer $
+#' @export
 getLBodeMINLPObjFunction <-function
 (
         cnolist,                model,                    ode_parameters,
