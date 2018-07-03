@@ -12,7 +12,6 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: plotLBodeFitness.R 4446 2014-03-12 15:35:32Z cokelaer $
 plotLBodeFitness <-function
 (
         cnolist,                    model,                        ode_parameters=NULL,
@@ -22,7 +21,7 @@ plotLBodeFitness <-function
         maxErrTestsFails=50,        plot_index_signals=NULL,    plot_index_experiments=NULL,
         plot_index_cues=NULL,         colormap="heat",
         plotParams=list(margin=0.1, width=15, height=12,
-                  cmap_scale=1, cex=1.6, ymin=NULL), initial_state=0.1
+                  cmap_scale=1, cex=1.6, ymin=NULL)
   
 
 )
@@ -41,11 +40,27 @@ plotLBodeFitness <-function
     sim_data=getLBodeDataSim(cnolist,model,
             ode_parameters,indices,timeSignals,time,verbose,
             transfer_function,reltol,atol,maxStepSize,maxNumSteps,
-            maxErrTestsFails, initial_state=initial_state);
+            maxErrTestsFails);
+            
+            
+            temp=list();
+            
+            for(i in 1:length(cnolist$timeSignals)){
+                
+                temp[[i]]=sim_data[[i]];
+            }
+            
+            sim_data=temp;
 
     times=cnolist$timeSignals;
 
     sim_data=lapply(sim_data,function(x)x[plot_index_experiments,plot_index_signals]);
+    
+   
+    
+    sim_data=temp;
+    
+    
     expResults=lapply(cnolist$valueSignals,function(x)x[plot_index_experiments,plot_index_signals]);
 
     sim_data=lapply(sim_data,function(x)as.matrix(x));

@@ -20,7 +20,10 @@
 		atol = 0.001, maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50,
    		plot_index_signals = NULL, plot_index_experiments = NULL,
 plot_index_cues = NULL, colormap="heat", plotParams=list(margin=0.1, width=15, height=12,
-                  cmap_scale=1, cex=1.6, ymin=NULL), initial_state=0.1 )
+                  cmap_scale=1, cex=1.6, ymin=NULL)
+  
+
+)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -84,9 +87,6 @@ plot_index_cues = NULL, colormap="heat", plotParams=list(margin=0.1, width=15, h
     \item{plotParams}{
     additional parameters to refine the ploggin. See plotOptimResultsPan
 function in CellNOptR for more details.
-}
-    \item{initial_state}{
-initial state of the dynamic nodes (non-measured) (Defaults to 0.1)
 }
 }
 

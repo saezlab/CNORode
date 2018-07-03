@@ -11,7 +11,6 @@
 	returns a list with the same size of the cnolist$valueSignals. 
 }
 
-
 \usage{
 	simulate(cnolist, model, ode_parameters=NULL, indices=NULL,
 	adjMatrix=NULL, time=1, verbose=0, transfer_function=3,

@@ -1,0 +1,215 @@
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <cvodes/cvodes.h>          /* prototypes for CVODES fcts. and consts. */
+#include <sundials/sundials_types.h> /* definition of type realtype */
+#include "CNOStructure.h"
+#include <nvector/nvector_serial.h>/* serial N_Vector types, fcts., and macros */
+
+#define Ith(v,i) ( NV_DATA_S(v)[i] )
+
+int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
+{
+  //Rprintf("test1\n");
+  
+  int i,j,k;
+  CNOStructure* myData=(CNOStructure*) data;
+  int countPar=0;
+  double tempProd;
+  double kHill,nHill;
+  double hillFuncValues[(*myData).maxNumInputs];
+  int countState=0;
+
+  
+  //Loop through every column j in the Graph adjacency matrix
+  for (j = 0; j <(*myData).nRows; j++)
+  {
+    
+    
+    if((*myData).isState[j])
+    {
+      // hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
+      Ith(ydot,countState)=0;
+      for (i = 0; i < (*myData).numInputs[j]; ++i)
+      {
+    
+        if((*myData).isState[(*myData).input_index[j][i]])
+        {
+          hillFuncValues[i]=
+            (*myData).transfer_function(Ith(y,(*myData).state_index[(*myData).input_index[j][i]]),nHill,kHill);
+        }
+        else
+        {
+          hillFuncValues[i]=
+            (*myData).transfer_function((*myData).state_array[(*myData).input_index[j][i]],nHill,kHill);
+        }
+      }
+      
+      //For every bit in the truth table
+      for (i = 0; i < (*myData).count_bits[j]; ++i)
+      {
+        //if ((*myData).truthTables[j][i])
+        //{
+        tempProd=1;
+        for (k = 0; k < (*myData).numInputs[j]; k++)
+        {
+          if(!(*myData).support_truth_tables[j][(*myData).truth_tables_index[j][i]][k])
+          {
+            tempProd*=(1-hillFuncValues[k]);
+          }
+          else tempProd*=hillFuncValues[k];
+        }
+        
+        Ith(ydot,countState)+=tempProd;
+        // }
+      }
+      
+      Ith(ydot,countState)=
+        (Ith(ydot,countState) * (1-(*myData).inhibitor_array[j]) - Ith(y,countState))
+        *(*myData).odeParameters[countPar++];
+      
+      
+      
+      
+      countState++;
+      
+    }
+    
+  }
+  
+  
+  return(0);
+}
+
+
+
+
+#define Ith(v,i) ( v[i] )
+
+int rhsODEF(double t, double* y, double* ydot, void *data)
+{
+  int i,j,k;
+  CNOStructure* myData=(CNOStructure*) data;
+  int countPar=0;
+  double tempProd;
+  double kHill,nHill;
+  double hillFuncValues[(*myData).maxNumInputs];
+  int countState=0;
+  //Indexing in C goes from 0 to N-1
+  int CholMedia_index=0, CholER_index=4, LDLR_index=6, NPC1_index=8, InputAcetate_index=12, Acetyl_CoA_index=13, Q9BWD1_index=14, Acetoacetyl_CoA_index=15, Q01581_index=16, HMG_CoA_index=17, Mevalonate_index=18, HMGCRact_index=19, Cholesterol_sulfate_index=25;
+  double CholMedia, CholER, LDLR, NPC1, InputAcetate, Acetyl_CoA, Q9BWD1, Acetoacetyl_CoA, Q01581, HMG_CoA, Mevalonate, HMGCRact, Cholesterol_sulfate, dCholER, dAcetyl_CoA, dAcetoacetyl_CoA, dHMG_CoA, dMevalonate, dCholesterol_sulfate;
+  double k1,k2,k3,k4,k5,k6,k7,k8,k9;
+  
+  //Loop through every column j in the Graph adjacency matrix
+  for (j = 0; j <(*myData).nRows; j++)
+  {
+    
+    
+    if((*myData).isState[j])
+    {
+      // hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
+      Ith(ydot,countState)=0;
+      for (i = 0; i < (*myData).numInputs[j]; ++i)
+      {
+        nHill=(*myData).odeParameters[countPar++];
+        kHill=(*myData).odeParameters[countPar++];
+        
+        
+        if(j==13){
+          k1=kHill;
+          //Rprintf("k1index=%d\n",countPar);
+        }
+        if(j==15){
+          if(i==0){
+            k2=kHill;
+            //Rprintf("k2index=%d\n",countPar);
+          }
+        }
+        if(j==17){
+          if(i==0){
+            k3=kHill;
+            //Rprintf("k3index=%d\n",countPar);
+          }
+        }
+        if(j==18){
+          if(i==0){
+            k4=kHill;
+            //Rprintf("k4index=%d\n",countPar);
+          }
+        }
+        if(j==4){
+          if(i==0){
+            k9=kHill;
+            //Rprintf("k9index=%d\n",countPar);
+          }
+          if(i==3){
+            k5=kHill;
+            //Rprintf("k5index=%d\n",countPar);
+            k6=nHill;
+            //Rprintf("k6index=%d\n",countPar-1);
+          }
+        }
+        if(j==25){
+          k7=kHill;
+          //Rprintf("k7index=%d\n",countPar);
+          k8=nHill;
+          //Rprintf("k8index=%d\n",countPar-1);
+        }
+        
+        
+        
+        
+        if((*myData).isState[(*myData).input_index[j][i]])
+        {
+          hillFuncValues[i]=
+            (*myData).transfer_function(Ith(y,(*myData).state_index[(*myData).input_index[j][i]]),nHill,kHill);
+        }
+        else
+        {
+          hillFuncValues[i]=
+            (*myData).transfer_function((*myData).state_array[(*myData).input_index[j][i]],nHill,kHill);
+        }
+      }
+      
+      //For every bit in the truth table
+      for (i = 0; i < (*myData).count_bits[j]; ++i)
+      {
+        //if ((*myData).truthTables[j][i])
+        //{
+        tempProd=1;
+        for (k = 0; k < (*myData).numInputs[j]; k++)
+        {
+          if(!(*myData).support_truth_tables[j][(*myData).truth_tables_index[j][i]][k])
+          {
+            tempProd*=(1-hillFuncValues[k]);
+          }
+          else tempProd*=hillFuncValues[k];
+        }
+        
+        Ith(ydot,countState)+=tempProd;
+        // }
+      }
+      Ith(ydot,countState)=
+        (Ith(ydot,countState)-Ith(y,countState))
+        *(*myData).odeParameters[countPar++]
+      *(1-(*myData).inhibitor_array[j]);
+      
+      
+      countState++;
+      
+      
+    }
+    
+  }
+  
+  
+  
+  return(0);
+  
+}
+
+
+
+
+

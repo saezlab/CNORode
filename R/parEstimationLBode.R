@@ -40,7 +40,16 @@ parEstimationLBode<-function (cnolist, model, method="ga",
             maxStepSize=paramsSSm$maxStepSize,
             maxNumSteps=paramsSSm$maxNumSteps,
             maxErrTestsFails=paramsSSm$maxErrTestsFails,
-            nan_fac=paramsSSm$nan_fac)
+            nan_fac=paramsSSm$nan_fac,
+            
+            # added
+            lambda_tau=paramsSSm$lambda_tau,
+            lambda_k=paramsSSm$lambda_k,
+            bootstrap=paramsSSm$bootstrap,
+            SSpenalty_fac=paramsSSm$SSpenalty_fac,
+            SScontrolPenalty_fac=paramsSSm$SScontrolPenalty_fac,
+            boot_seed=paramsSSm$boot_seed
+            )
 
 
     }

@@ -51,5 +51,7 @@ getLBodeModelSim<-function
     sim_data=sim_function(cnolist,model,ode_parameters$parValues)
 
     sim_data=lapply(sim_data, function(x) as.matrix(x))
+    
+    
     return(sim_data);
 }

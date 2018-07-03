@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: plotLBodeModelSim.R 3882 2013-08-06 10:53:15Z cokelaer $
+
 plotLBodeModelSim <-function
 (
 		cnolist,				    model,					    ode_parameters=NULL,
@@ -34,6 +34,17 @@ plotLBodeModelSim <-function
 	sim_data=getLBodeModelSim(cnolist,model,
 			ode_parameters,indices,timeSignals,time,verbose,transfer_function,
 			reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+
+temp=list();
+
+for(i in 1:length(cnolist$timeSignals)){
+    
+    temp[[i]]=sim_data[[i]];
+}
+
+sim_data=temp;
+
+
 
     cnolist = simdata2cnolist(sim_data, cnolist, model)
 
