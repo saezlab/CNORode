@@ -13,6 +13,7 @@
 #
 ##############################################################################
 # $Id: incidence2Adjacency.R 3157 2013-01-09 16:04:09Z cokelaer $
+#' @export
 incidence2Adjacency <-
 function(model)
 { 

@@ -1,14 +1,17 @@
 Package: CNORode
 Type: Package
-Title: ODE add-on to CellNOptR 
-Version: 1.23.0
-Date: 2014-01-10
-Author: David Henriques, Thomas Cokelaer
+Title: Modified version of ODE add-on to CellNOptR
+Version: 2.0.0
+Date: 2018-07-3
+Author: David Henriques, Thomas Cokelaer, Federica Eduati
 Maintainer: David Henriques <davidpcnet@hotmail.com>
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
-Description: ODE add-on to CellNOptR
-License: GPL-2
+Description: Logic based ordinary differential equation (ODE) add-on to
+    CellNOptR.
+License: file LICENSE
 LazyLoad: yes
-Depends: CellNOptR (>= 1.5.14), genalg
+Depends:
+    CellNOptR,
+    genalg
 Enhances: MEIGOR
-biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
+RoxygenNote: 5.0.1

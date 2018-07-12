@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: parEstimationLBodeSSm.R 4446 2014-03-12 15:35:32Z cokelaer $
+#' @export
 parEstimationLBodeSSm <-function
 (
 		cnolist,				model,					ode_parameters=NULL,
@@ -21,14 +21,15 @@ parEstimationLBodeSSm <-function
 		time=1,					verbose=0, 				transfer_function=3,	
 		reltol=1e-4,			atol=1e-3,				maxStepSize=Inf,		
 		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1,
-        useVariances=F, initial_state=0.1
+		lambda_tau=0, lambda_k=0, bootstrap=F,
+		SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1)
 )
 {
 
    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
-   tryCatch({library(MEIGOR)}, error=function(e){print("MEIGOR (essR) package not found.
-	SSm not available. Install the package and load it or try the Genetic Algorithm
-	optimiser instead.");return(ode_parameters);});
+   if(!require(MEIGOR)) stop("MEIGOR (essR) package not found.
+	SSm not available. Install the MEIGOR package and load it or try the Genetic Algorithm
+	optimiser instead.");
 
 
 	adjMat=incidence2Adjacency(model);
@@ -49,11 +50,25 @@ parEstimationLBodeSSm <-function
     val=essR(problem,opts)
 
 	problem=list();
-	problem$f<-getLBodeContObjFunction(cnolist,	model,ode_parameters,indices,
-	  time,verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,
-      nan_fac, useVariances, initial_state);
-
-
+	problem$f<-getLBodeContObjFunction(cnolist=cnolist,
+	                                   model=model,
+	                                   ode_parameters=ode_parameters,
+	                                   indices=indices,
+	                                   time=time,
+	                                   verbose=verbose,
+	                                   transfer_function=transfer_function,
+	                                   reltol=reltol,
+	                                   atol=atol,
+	                                   maxStepSize=maxStepSize,
+	                                   maxNumSteps=maxNumSteps,
+	                                   maxErrTestsFails=maxErrTestsFails,
+	                                   nan_fac=nan_fac,
+	                                   lambda_tau=lambda_tau,
+	                                   lambda_k=lambda_k,
+	                                   bootstrap=bootstrap,
+	                                   SSpenalty_fac=SSpenalty_fac,
+	                                   SScontrolPenalty_fac=SScontrolPenalty_fac,
+	                                   boot_seed=boot_seed);
 	problem$x_L <- ode_parameters$LB[ode_parameters$index_opt_pars];
 	problem$x_U <- ode_parameters$UB[ode_parameters$index_opt_pars];
 	problem$x_0<- ode_parameters$parValues[ode_parameters$index_opt_pars];
@@ -63,9 +78,9 @@ parEstimationLBodeSSm <-function
 	opts$maxeval=maxeval;
 	opts$maxtime=maxtime;
 	if(!is.null(local_solver))opts$local_solver=local_solver;
-	if(!is.null(ndiverse))opts$ndiverse=ndiverse;
+	if(!is.null(ndiverse))opts$ndiverse=ndiverse;      
 	if(!is.null(dim_refset))opts$dim_refset=dim_refset;  
-	results=essR(problem,opts);
+	results=MEIGOR::essR(problem,opts);
 	ode_parameters$parValues[ode_parameters$index_opt_pars]=results$xbest;
 	ode_parameters$ssm_results=results;
 	return(ode_parameters);	

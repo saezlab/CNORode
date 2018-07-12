@@ -3,7 +3,7 @@
 
 typedef struct
 {
-	int** interMat;
+  int** interMat;
 	int** notMat;
 	double** valueSignals;
 	double** valueInhibitors;
@@ -39,5 +39,7 @@ typedef struct
 	int** truth_tables_index;
 	int** input_index;
 	int* count_bits;
+  double** ydotf;
+  double** ydot0;
 
 }CNOStructure;

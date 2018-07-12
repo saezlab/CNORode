@@ -12,14 +12,15 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: getLBodeSimFunction.R 4446 2014-03-12 15:35:32Z cokelaer $
+#' @export
+#' @useDynLib CNORode sim_logic_ode
 getLBodeSimFunction <-function
 (
 		cnolist1,				model1,					adjMatrix1,
 		indices1, 				odeParameters1,			time1=1,
 		verbose1=0,				transfer_function1=3,	reltol1=1e-4,	
 		atol1=1e-3,				maxStepSize1=Inf,		maxNumSteps1=100000,
-		maxErrTestsFails1=50, initial_state1=0.1
+		maxErrTestsFails1=50
 )
 {
 				
@@ -29,7 +30,7 @@ getLBodeSimFunction <-function
 			indices=indices1,					adjMatrix=adjMatrix1, 					time=time1,
 			verbose=verbose1, 					transfer_function=transfer_function1,	reltol=reltol1,
 			atol=atol1,							maxStepSize=maxStepSize1,				maxNumSteps=maxNumSteps1,
-			maxErrTestsFails=maxErrTestsFails1, initial_state=initial_state1
+			maxErrTestsFails=maxErrTestsFails1
 	)
 	{	 
 		interMat <- as.integer(as.vector(t(sif$interMat)))
@@ -67,13 +68,12 @@ getLBodeSimFunction <-function
 		maxNumSteps=as.integer(maxNumSteps);
 		maxErrTestsFails=as.integer(maxErrTestsFails);
 		break_at_1st_fail=as.integer(0);
-	    initial_state = initial_state
-
+		
 		res = .Call("sim_logic_ode",interMat,notMat,adjMatrix,nRows,nCols,nPars,timeSignals,
 				valueInhibitors,valueSignals,valueStimuli,nTimes,nExperiments,nSignals,
 				indexSignals,nStimuli,indexStimuli,nInhibitors,indexInhibitors,odeParameters,
 				verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,
-				break_at_1st_fail, initial_state);
+				break_at_1st_fail);
 		return(res);
 	}
 	return(simulate_logic_based_ode_model);

@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: getLBodeModelSim.R 3881 2013-08-06 10:52:07Z cokelaer $
+#' @export
 getLBodeModelSim<-function
 (
         cnolist,                model,                    ode_parameters=NULL,
@@ -51,5 +51,7 @@ getLBodeModelSim<-function
     sim_data=sim_function(cnolist,model,ode_parameters$parValues)
 
     sim_data=lapply(sim_data, function(x) as.matrix(x))
+    
+    
     return(sim_data);
 }

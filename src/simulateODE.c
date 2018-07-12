@@ -10,6 +10,7 @@
 #include <sundials/sundials_types.h>
 #include <sundials/sundials_math.h>
 
+int rhsODEF(double t, double* y, double* ydot, void *data);
 
 #include "CNOStructure.h"
 
@@ -24,7 +25,7 @@ static int check_flag(void *flagvalue, char *funcname, int opt,int verbose);
 
 int simulateODE
 (
-		CNOStructure* data,		int exp_num, 			int verbose,
+  	CNOStructure* data,		int exp_num, 			int verbose,
 		double reltol,			double atol,			double maxStepSize,
 		int maxNumSteps,		int maxErrTestFails
 )
@@ -33,7 +34,12 @@ int simulateODE
 	realtype tout, ti, tf;
 	N_Vector y;
 	void *cvode_mem;
-	
+	double* yf;
+  double* y0;
+  double* ydotf;
+  double* ydot0;
+    
+    
 	cvode_mem = NULL;
 	y = NULL;
 
@@ -49,7 +55,7 @@ int simulateODE
     /* Initialize y */
 	for(i=0; i<(*data).nRows; i++)
 	{
-		(*data).state_array[i] = 0.1;
+		(*data).state_array[i] = 0.5;
 		(*data).inhibitor_array[i]=0;
 	}
 
@@ -167,6 +173,7 @@ int simulateODE
     CVodeSetMaxErrTestFails(cvode_mem, maxErrTestFails);
 	 
 
+    
     for (i = 1; i < (*data).nTimes; ++i)
     {
     	tout=(*data).timeSignals[i];
@@ -187,10 +194,30 @@ int simulateODE
     	}
     	//if(verbose)printf("\n");
     }
-    //if(verbose)printf("\n");
+    
+    yf=(double*)malloc((*data).nStates*sizeof(double));
+    ydotf=(double*)malloc((*data).nStates*sizeof(double));
+    for (j = 0; j < (*data).nStates; j++)yf[j]=
+    (*data).sim_results[exp_num][(*data).nTimes-1][j];
+    rhsODEF(tout,yf,ydotf, data);
+    
+   y0=(double*)malloc((*data).nStates*sizeof(double));
+   ydot0=(double*)malloc((*data).nStates*sizeof(double));
+   for (j = 0; j < (*data).nStates; j++) y0[j]=(*data).sim_results[exp_num][0][j];
+   rhsODEF(tout,y0,ydot0, data);
+
+    
+    for (j = 0; j < (*data).nStates; j++) (*data).ydotf[exp_num][j]=ydotf[j];
+    for (j = 0; j < (*data).nStates; j++) (*data).ydot0[exp_num][j]=ydot0[j];
+
+        
 
     N_VDestroy_Serial(y);
     /* Free integrator memory */
+    
+    free(ydotf);
+    free(yf);
+    
     CVodeFree(&cvode_mem);
 
     return(1);
@@ -224,6 +251,5 @@ static int check_flag(void *flagvalue, char *funcname, int opt,int verbose)
 
 	return(0);
 }
-
 
 
