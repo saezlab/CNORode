@@ -30,7 +30,7 @@ double linear_transfer_function(double x,double n,double k);
 double FG_transfer_function(double x,double n,double k);
 int* getNumInputs(int **adjMatrix,int n);
 int* getNumBits(int* numInputs,int n);
-int *findStates(int **adjMatrix, int n);
+int *findStates(int nNodes, int nStimuli, int* indexStimuli);
 int** getTruthTables(int** adjMat,int** interMat,int** notMat,int* isState,int* nInputs,int *nBits,int nRows,int nCols);
 int *getStateIndex(int **adjMatrix, int n);
 int*** get_support_truth_tables(int n,int *nInputs);
@@ -75,7 +75,8 @@ SEXP sim_logic_ode
 	 double*** simResults;
 	 double* inhibitor_array;
 	 int maxNumInputs=-1;
-
+	 int *stateVec;
+	 	
 	 int nRows = INTEGER(nRows_in)[0];
 	 int nCols=INTEGER(nCols_in)[0];
 	 int nSignals=INTEGER(nSignals_in)[0];
@@ -224,8 +225,7 @@ SEXP sim_logic_ode
 	  tempData.maxNumInputs=maxNumInputs;
 
 	  tempData.numBits =(int*) getNumBits(tempData.numInputs,tempData.nRows);
-	  tempData.isState =(int*) findStates(tempData.adjacencyMatrix,tempData.nRows);
-
+	  tempData.isState =(int*) findStates(tempData.nRows, nStimuli, indexStim);
 
 	  tempData.truthTables =(int**) getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
