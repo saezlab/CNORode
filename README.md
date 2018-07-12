@@ -1,9 +1,8 @@
 # CNORode: a logic based ordinary differential equation add-on for CellNOptR
 
-This version of CNORode is a continuation of the [CNORode2017](https://github.com/saezlab/CNORode2017) package, which
-was for a long time a side implementation of CNORode with many added features, for examples the sparsity enforcing
-regularisation and paramter uncertainty analysis based on bootstrapping. 
-Maintaining two, almost identical packages are time consuming, therefore we decided to merge the packages and continue with CNORode2017. 
+This version of CNORode is a continuation of the [CNORode2017](https://github.com/saezlab/CNORode2017) package. CNORode2017 was lamor equivalent to CNORode with some added features, such as the sparsity enforcing
+regularisation and parameter uncertainty analysis based on bootstrapping. 
+Maintaining two packages are time consuming, therefore we decided to merge the packages and continue with CNORode2017.
 
 The older version of CNORode can be downloaded from [release_v1.23](https://github.com/saezlab/CNORode/releases/tag/v1.23.0)
 
@@ -33,7 +32,7 @@ library(devtools)
 install_github("saezlab/CellNOptR")
 ```
 
-*CNORode* can be installed typing:
+*CNORode* can be installed from this repository by typing:
 
 ```R
 library(devtools)
