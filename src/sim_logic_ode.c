@@ -23,6 +23,8 @@
 #include <Rinternals.h>
 #include <R_ext/Print.h>
 
+#define DEBUG 0
+
 double normHill_mod(double x,double n,double k);
 double normHill(double x,double n,double k);
 double hill_function(double x,double n,double k);
@@ -32,7 +34,8 @@ int* getNumInputs(int **adjMatrix,int n);
 int* getNumBits(int* numInputs,int n);
 int *findStates(int nNodes, int nStimuli, int* indexStimuli);
 int** getTruthTables(int** adjMat,int** interMat,int** notMat,int* isState,int* nInputs,int *nBits,int nRows,int nCols);
-int *getStateIndex(int **adjMatrix, int n);
+int *getStateIndex(int nNodes, int nStimuli, int* indexStimuli);
+//int *getStateIndex(int **adjMatrix, int n);
 int*** get_support_truth_tables(int n,int *nInputs);
 int simulateODE(CNOStructure* data,  int exp_num,int verbose,double reltol,double atol,double maxStepSize,
 int maxNumSteps,int maxErrTestFails);
@@ -75,7 +78,7 @@ SEXP sim_logic_ode
 	 double*** simResults;
 	 double* inhibitor_array;
 	 int maxNumInputs=-1;
-	 int *stateVec;
+	 
 	 	
 	 int nRows = INTEGER(nRows_in)[0];
 	 int nCols=INTEGER(nCols_in)[0];
@@ -226,14 +229,22 @@ SEXP sim_logic_ode
 
 	  tempData.numBits =(int*) getNumBits(tempData.numInputs,tempData.nRows);
 	  tempData.isState =(int*) findStates(tempData.nRows, nStimuli, indexStim);
-
+	  if(DEBUG){
+	  	printf("\nisState:\n\t");
+	  	for(i=0; i<nRows; i++) 	printf("%d ",tempData.isState[i]);
+	  	printf("\n");
+	  }
+	  
 	  tempData.truthTables =(int**) getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
 	  state_array= (double*)malloc(tempData.nRows*sizeof(double));
 	  inhibitor_array=(double*)malloc((tempData.nRows)*sizeof(double));
 
-	  tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
+	  //tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
+	  tempData.state_index=(int*)getStateIndex(tempData.nRows, nStimuli, indexStim);
+	  
+	  
 	  tempData.inhibitor_array=inhibitor_array;
 	  tempData.state_array=state_array;
 
@@ -259,6 +270,10 @@ SEXP sim_logic_ode
 			  simResults[i][j]=(double*)malloc(tempData.nStates*sizeof(double));
 		  }
 	  }
+	  if(DEBUG){
+	  	printf("----->   size of SimResults is [%d][%d][%d] \n",nExperiments,nTimes,tempData.nStates);
+	  }
+	
     
     
     tempData.ydotf=(double**)malloc(nExperiments*sizeof(double*));

@@ -8,6 +8,7 @@
 #include <nvector/nvector_serial.h>/* serial N_Vector types, fcts., and macros */
 
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
+#define DEBUG 0
 
 int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 {
@@ -18,10 +19,15 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 		double kHill,nHill;
 	    double hillFuncValues[(*myData).maxNumInputs];
 	    int countState=0;
-
+	    if(DEBUG){
+	    	printf("\nrhsODE ****\n");
+	    }
 	    //Loop through every column j in the Graph adjacency matrix
 	    for (j = 0; j <(*myData).nRows; j++)
 	    {
+	    	if(DEBUG){
+	    		printf("checkpoint 1\n");
+	    	}
 	        if((*myData).isState[j])
 	        {
 	          // hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
@@ -67,6 +73,9 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        		   	   	   *(1-(*myData).inhibitor_array[j]);
 
 	           countState++;
+	           if(DEBUG){
+	           	printf("checkpoint 2\n");
+	           }
 	        }
 	    }
 
