@@ -74,6 +74,11 @@ getLBodeSimFunction <-function
 				indexSignals,nStimuli,indexStimuli,nInhibitors,indexInhibitors,odeParameters,
 				verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,
 				break_at_1st_fail);
+		
+		res = lapply(res,function(x){
+			colnames(x) = sif$namesSpecies
+			return(x)
+			})
 		return(res);
 	}
 	return(simulate_logic_based_ode_model);

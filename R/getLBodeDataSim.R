@@ -23,23 +23,32 @@ getLBodeDataSim<-function
 )
 {
 
-    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
-	adjMat=incidence2Adjacency(model);
-	if(is.null(indices))indices <- indexFinder(cnolist,model,verbose=FALSE);
-	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
-	if(!is.null(timeSignals))cnolist$timeSignals=timeSignals;
+    if (class(cnolist)=="CNOlist"){
+    	cnolist = compatCNOlist(cnolist)
+    }
 	
-	sim_function=getLBodeSimFunction(cnolist,model,adjMat,
-			indices1=indices, odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
-			transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
-			maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails);
-	sim=sim_function(cnolist,model, odeParameters=ode_parameters$parValues);
-	sim=lapply(sim,function(x) x[,indices$signals]);
-	sim=lapply(sim,function(x) as.matrix(x));
+	adjMat=incidence2Adjacency(model)
 	
-	if(dim(cnolist$valueSignals[[1]])[1]!=dim(sim[[1]])[1]){
-		sim=lapply(sim,function(x) t(as.matrix(x)));
+	if(is.null(indices)){
+		indices <- indexFinder(cnolist,model,verbose=FALSE)
 	}
+	
+	if(is.null(ode_parameters)){
+		ode_parameters = createLBodeContPars(model)
+	}
+	
+	if(!is.null(timeSignals)){
+		cnolist$timeSignals = timeSignals
+	}
+	
+	sim_function = getLBodeSimFunction(cnolist, model, adjMat,
+			indices1=indices, odeParameters1=ode_parameters$parValues, time1=time, verbose1=verbose,
+			transfer_function1=transfer_function, reltol1=reltol, atol1=atol, maxStepSize1=maxStepSize,
+			maxNumSteps1=maxNumSteps, maxErrTestsFails1=maxErrTestsFails)
+	
+	sim=sim_function(cnolist,model, odeParameters=ode_parameters$parValues)
+	
+	sim=lapply(sim,function(x) x[,indices$signals, drop=FALSE])
 	
 	return(sim);
 }
