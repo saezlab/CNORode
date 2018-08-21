@@ -23,6 +23,9 @@ parEstimationLBodeGA<-function (cnolist, model, ode_parameters = NULL, indices =
 {
 
     if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+	
+	checkSignals(CNOlist=cnolist,model=model)
+	
     adjMat = incidence2Adjacency(model)
     if (is.null(ode_parameters)) {
         ode_parameters = createLBodeContPars(model, random = TRUE)
