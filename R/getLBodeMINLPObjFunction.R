@@ -19,22 +19,30 @@ getLBodeMINLPObjFunction <-function
         indices=NULL,            time=1,                    verbose=0,
         transfer_function=3,    reltol=1e-4,            atol=1e-3,
         maxStepSize=Inf,        maxNumSteps=100000,        maxErrTestsFails=50,
-        nan_fac=1
+        nan_fac=1,  initialValueMatrix = NULL
 )
 {
-    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+    if (class(cnolist)=="CNOlist"){
+    	cnolist = compatCNOlist(cnolist)
+    }
 
-    adjMatrix=incidence2Adjacency(model);
+    adjMatrix=incidence2Adjacency(model)
 
-    if(is.null(indices))indices=indexFinder(cnolist,model,verbose=FALSE);
-
-    n_cont=length(ode_parameters$index_opt_pars);
-    n_int=dim(model$interMat)[2];
+    if(is.null(indices)){
+    	indices=indexFinder(cnolist,model,verbose=FALSE)
+    }
+    
+    if(is.null(initialValueMatrix)){
+    	initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+    }
+    
+    n_cont=length(ode_parameters$index_opt_pars)
+    n_int=dim(model$interMat)[2]
 
     sim_function<-getLBodeSimFunction(cnolist,model,adjMatrix1=adjMatrix,
             indices1=indices,odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
             transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
-            maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails)
+            maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails,initialValuesMatrix1=initialValuesMatrix)
 
     logic_ode_MINLP_objective_function<-function
     (

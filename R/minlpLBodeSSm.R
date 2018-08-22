@@ -22,12 +22,20 @@ function
     local_solver=NULL,      time=1,                    verbose=0,
     transfer_function=3,    reltol=1e-4,            atol=1e-3,
     maxStepSize=Inf,        maxNumSteps=100000,        maxErrTestsFails=50,
-    nan_fac=1
+    nan_fac=1,              initialValueMatrix=NULL
 )
 {
 
-    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
-    adjMat=incidence2Adjacency(model);
+    if (class(cnolist)=="CNOlist"){
+    	cnolist = compatCNOlist(cnolist)
+    }
+	
+    adjMat=incidence2Adjacency(model)
+    
+    if(is.null(initialValueMatrix)){
+    	initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+    }
+    
     if(is.null(ode_parameters))
     {
         ode_parameters=createLBodeContPars(model,random=TRUE);
@@ -58,7 +66,7 @@ function
 
     problem=list();
     problem$f<-getLBodeMINLPObjFunction(cnolist,model,ode_parameters,indices,time,
-            verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+            verbose,transfer_function,reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,initialValueMatrix=initialValueMatrix);
     problem$x_L <- c(ode_parameters$LB[ode_parameters$index_opt_pars],matrix(0,1,n_int));
     problem$x_U <- c(ode_parameters$UB[ode_parameters$index_opt_pars],matrix(1,1,n_int));
     problem$x_0<- c(ode_parameters$parValues[ode_parameters$index_opt_pars],int_x0);

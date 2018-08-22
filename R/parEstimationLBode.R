@@ -16,11 +16,18 @@
 
 
 parEstimationLBode<-function (cnolist, model, method="ga",
-    ode_parameters = NULL, indices = NULL, paramsGA=NULL, paramsSSm=NULL)
+    ode_parameters = NULL, indices = NULL, paramsGA=NULL, paramsSSm=NULL, initialValueMatrix=NULL )
 {
 
 
-    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+    if (class(cnolist)=="CNOlist"){
+    	cnolist = compatCNOlist(cnolist)
+    }
+	
+	if(is.null(initialValueMatrix)){
+		initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+	}
+	
     if (method == "essm"){
         if (is.null(paramsSSm)){
             paramsSSm = defaultParametersSSm()
@@ -48,7 +55,8 @@ parEstimationLBode<-function (cnolist, model, method="ga",
             bootstrap=paramsSSm$bootstrap,
             SSpenalty_fac=paramsSSm$SSpenalty_fac,
             SScontrolPenalty_fac=paramsSSm$SScontrolPenalty_fac,
-            boot_seed=paramsSSm$boot_seed
+            boot_seed=paramsSSm$boot_seed,
+            initialValueMatrix=initialValueMatrix
             )
 
 
@@ -73,7 +81,8 @@ parEstimationLBode<-function (cnolist, model, method="ga",
             maxStepSize=paramsGA$maxStepSize,
             maxNumSteps=paramsGA$maxNumSteps,
             maxErrTestsFails=paramsGA$maxErrTestsFails,
-            nan_fac=paramsGA$nan_fac)
+            nan_fac=paramsGA$nan_fac,
+            initialValueMatrix=initialValueMatrix)
     }
     else{
         stop ("method argument must be either 'ga' or 'essm'." )

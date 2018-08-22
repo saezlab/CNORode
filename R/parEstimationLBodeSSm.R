@@ -15,23 +15,28 @@
 #' @export
 parEstimationLBodeSSm <-function
 (
-		cnolist,				model,					ode_parameters=NULL,
-		indices=NULL,			maxeval=Inf,			maxtime=100,			
-		ndiverse=NULL,			dim_refset=NULL, 		local_solver=NULL,      
-		time=1,					verbose=0, 				transfer_function=3,	
-		reltol=1e-4,			atol=1e-3,				maxStepSize=Inf,		
-		maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1,
-		lambda_tau=0, lambda_k=0, bootstrap=F,
-		SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1)
+	cnolist,				model,					ode_parameters=NULL,
+	indices=NULL,			maxeval=Inf,			maxtime=100,			
+	ndiverse=NULL,			dim_refset=NULL, 		local_solver=NULL,      
+	time=1,					verbose=0, 				transfer_function=3,	
+	reltol=1e-4,			atol=1e-3,				maxStepSize=Inf,		
+	maxNumSteps=100000,		maxErrTestsFails=50,	nan_fac=1,
+	lambda_tau=0, lambda_k=0, bootstrap=F,
+	SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1), initialValueMatrix=NULL
 )
 {
-
-   if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
-   if(!require(MEIGOR)) stop("MEIGOR (essR) package not found.
+	
+	if (class(cnolist)=="CNOlist"){
+		cnolist = compatCNOlist(cnolist)
+	}
+	if(is.null(initialValueMatrix)){
+		initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+	}
+	if(!require(MEIGOR)) stop("MEIGOR (essR) package not found.
 	SSm not available. Install the MEIGOR package and load it or try the Genetic Algorithm
 	optimiser instead.");
-
-
+	
+	
 	checkSignals(CNOlist=cnolist,model=model)
 	
 	adjMat=incidence2Adjacency(model);
@@ -48,29 +53,30 @@ parEstimationLBodeSSm <-function
 	opts<-list();
 	opts$maxeval=0;
 	opts$maxtime=0;
-
-    val=essR(problem,opts)
-
+	
+	val=essR(problem,opts)
+	
 	problem=list();
 	problem$f<-getLBodeContObjFunction(cnolist=cnolist,
-	                                   model=model,
-	                                   ode_parameters=ode_parameters,
-	                                   indices=indices,
-	                                   time=time,
-	                                   verbose=verbose,
-	                                   transfer_function=transfer_function,
-	                                   reltol=reltol,
-	                                   atol=atol,
-	                                   maxStepSize=maxStepSize,
-	                                   maxNumSteps=maxNumSteps,
-	                                   maxErrTestsFails=maxErrTestsFails,
-	                                   nan_fac=nan_fac,
-	                                   lambda_tau=lambda_tau,
-	                                   lambda_k=lambda_k,
-	                                   bootstrap=bootstrap,
-	                                   SSpenalty_fac=SSpenalty_fac,
-	                                   SScontrolPenalty_fac=SScontrolPenalty_fac,
-	                                   boot_seed=boot_seed);
+									   model=model,
+									   ode_parameters=ode_parameters,
+									   indices=indices,
+									   time=time,
+									   verbose=verbose,
+									   transfer_function=transfer_function,
+									   reltol=reltol,
+									   atol=atol,
+									   maxStepSize=maxStepSize,
+									   maxNumSteps=maxNumSteps,
+									   maxErrTestsFails=maxErrTestsFails,
+									   nan_fac=nan_fac,
+									   lambda_tau=lambda_tau,
+									   lambda_k=lambda_k,
+									   bootstrap=bootstrap,
+									   SSpenalty_fac=SSpenalty_fac,
+									   SScontrolPenalty_fac=SScontrolPenalty_fac,
+									   boot_seed=boot_seed,
+									   initialValueMatrix = initialValueMatrix);
 	problem$x_L <- ode_parameters$LB[ode_parameters$index_opt_pars];
 	problem$x_U <- ode_parameters$UB[ode_parameters$index_opt_pars];
 	problem$x_0<- ode_parameters$parValues[ode_parameters$index_opt_pars];

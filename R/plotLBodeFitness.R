@@ -21,14 +21,20 @@ plotLBodeFitness <-function
         atol=1e-3,                    maxStepSize=Inf,             maxNumSteps=100000,
         maxErrTestsFails=50,        plot_index_signals=NULL,    plot_index_experiments=NULL,
         plot_index_cues=NULL,         colormap="heat",
-        plotParams=list(margin=0.1, width=15, height=12,
-                  cmap_scale=1, cex=1.6, ymin=NULL)
+        plotParams=list(margin=0.1, width=15, height=12,cmap_scale=1, cex=1.6, ymin=NULL),
+        initialValueMatrix=NULL
   
 
 )
 {
 
-    if (class(cnolist)=="CNOlist"){ cnolist = compatCNOlist(cnolist)}
+    if (class(cnolist)=="CNOlist"){
+    	cnolist = compatCNOlist(cnolist)
+    }
+	
+	if(is.null(initialValueMatrix)){
+		initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+	}
 
     if(is.null(plot_index_experiments))plot_index_experiments=1:dim(cnolist$valueCues)[1];
     if(is.null(plot_index_cues))plot_index_cues=1:dim(cnolist$valueCues)[2];
@@ -41,7 +47,7 @@ plotLBodeFitness <-function
     sim_data=getLBodeDataSim(cnolist,model,
             ode_parameters,indices,timeSignals,time,verbose,
             transfer_function,reltol,atol,maxStepSize,maxNumSteps,
-            maxErrTestsFails);
+            maxErrTestsFails,initialValueMatrix=initialValueMatrix);
             
             
             temp=list();

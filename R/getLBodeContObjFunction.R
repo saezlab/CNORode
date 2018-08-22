@@ -21,19 +21,28 @@ getLBodeContObjFunction<-
   transfer_function=3,    reltol=1e-4,            atol=1e-3,
   maxStepSize=Inf,        maxNumSteps=100000,        maxErrTestsFails=50,
   nan_fac=1, lambda_tau=0, lambda_k=0, bootstrap=F,
-  SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1)
+  SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1), initialValueMatrix = NULL
 )
   {
   
-  if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+  if (class(cnolist)=="CNOlist"){
+  	cnolist = compatCNOlist(cnolist)
+  }
+	
   adjMatrix=incidence2Adjacency(model);
   
-  if(is.null(indices))indices=indexFinder(cnolist,model,verbose=FALSE);
+  if(is.null(indices)){
+  	indices=indexFinder(cnolist,model,verbose=FALSE)
+  }
+  
+  if(is.null(initialValueMatrix)){
+  	initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+  }
   
   sim_function=getLBodeSimFunction(cnolist,model,adjMatrix1=adjMatrix,
                                    indices1=indices, odeParameters1=ode_parameters$parValues, time1=time,verbose1=verbose,
                                    transfer_function1=transfer_function,reltol1=reltol,atol1=atol,maxStepSize1=maxStepSize,
-                                   maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails)
+                                   maxNumSteps1=maxNumSteps,maxErrTestsFails1=maxErrTestsFails,initialValueMatrix1=initialValueMatrix)
   
   logic_ode_continuous_objective_function<-function
   (

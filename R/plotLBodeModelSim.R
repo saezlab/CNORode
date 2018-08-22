@@ -20,7 +20,7 @@ plotLBodeModelSim <-function
 	time=1,						verbose=0, 				    transfer_function=3,		
 	reltol=1e-4,				atol=1e-3,				    maxStepSize=Inf,
 	maxNumSteps=100000,			maxErrTestsFails=50,  		large=FALSE,          		
-	nsplit=4, show=T
+	nsplit=4, show=T, initialValueMatrix=NULL
 )
 {
 	
@@ -28,12 +28,15 @@ plotLBodeModelSim <-function
 	if(is.null(indices))indices=indexFinder(cnolist,model);
 	if(is.null(adjMatrix))adjMatrix=incidence2Adjacency(model);
 	if(is.null(ode_parameters))ode_parameters=createLBodeContPars(model);
+	if(is.null(initialValueMatrix)){
+		initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+	}
 	if(!is.null(timeSignals))cnolist$timeSignals=timeSignals;
 	
 	
 	sim_data=getLBodeModelSim(cnolist,model,
 							  ode_parameters,indices,timeSignals,time,verbose,transfer_function,
-							  reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails);
+							  reltol,atol,maxStepSize,maxNumSteps,maxErrTestsFails,initialValueMatrix = initialValueMatrix);
 	
 	temp=list();
 	

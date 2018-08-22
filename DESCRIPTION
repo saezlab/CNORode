@@ -1,8 +1,8 @@
 Package: CNORode
 Type: Package
 Title: Modified version of ODE add-on to CellNOptR
-Version: 2.0.0
-Date: 2018-07-3
+Version: 2.1.0
+Date: 2018-08-21
 Author: David Henriques, Thomas Cokelaer, Federica Eduati, Attila Gabor
 Maintainer: David Henriques <davidpcnet@hotmail.com>
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
@@ -15,3 +15,4 @@ Depends:
     genalg
 Enhances: MEIGOR
 RoxygenNote: 5.0.1
+Suggests: testthat

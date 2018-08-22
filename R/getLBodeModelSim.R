@@ -19,12 +19,18 @@ getLBodeModelSim<-function
         indices=NULL,            timeSignals=NULL,        time=1,
         verbose=0,                transfer_function=3,    reltol=1e-4,
         atol=1e-3,                maxStepSize=Inf,        maxNumSteps=100000,
-        maxErrTestsFails=50
+        maxErrTestsFails=50,     initialValueMatrix=NULL
 )
 {
 
     # this is a temporary solution to deal with CNOlist class
-    if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+    if (class(cnolist)=="CNOlist"){
+    	cnolist = compatCNOlist(cnolist)
+    }
+	
+	if(is.null(initialValueMatrix)){
+		initialValueMatrix =  createLBodeInitialConditions(model = model,data = cnolist)
+	}
 
 
     adjMat=incidence2Adjacency(model);
@@ -45,7 +51,7 @@ getLBodeModelSim<-function
     sim_function=getLBodeSimFunction(NULL,NULL,adjMat,
             indices, NULL, time,verbose,
             transfer_function,reltol,atol,maxStepSize,
-            maxNumSteps,maxErrTestsFails);
+            maxNumSteps,maxErrTestsFails,initialValueMatrix1=initialValueMatrix);
 
     # TC aug 2013 !!! only parValues are used in ode_parameters 
     sim_data=sim_function(cnolist,model,ode_parameters$parValues)
