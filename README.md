@@ -39,6 +39,13 @@ library(devtools)
 install_github("saezlab/CNORode")
 ```
 
+Install the developement version of CNORode:
+```R
+library(devtools)
+install_github("saezlab/CNORode",ref="dev")
+```
+
+
 ### Basic info on logic based ODE and CNORode
 For an introduction on logic based ODE we recommend reading the original publication [(Wittmann et al., BMC Syst Biol., 2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2764636/). Briefly, logic based ODE are ordinary differential equations (ODE) derived from logic rules using continuous update function (*B<sub>i</sub>*), which allows to have a continuous description of the behaviour of the species of interest both in time and in state. Each species *x<sub>i</sub>* is described by an ODE:
 

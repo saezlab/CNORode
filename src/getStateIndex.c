@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#define DEBUG 0
+/*
 int *getStateIndex(int **adjMatrix, int n)
 {
     int* indexVec=malloc(n*sizeof(int));
@@ -20,13 +21,45 @@ int *getStateIndex(int **adjMatrix, int n)
             }
         }
      }
-    /*
+    
     printf("State Index\n");
     for (j = 0; j <n; j++)
     {
-    	Rprintf("species %d \t\t index %d\n",j,indexVec[j]);
+    	printf("species %d \t\t index %d\n",j,indexVec[j]);
     }
-    */
+    
 
    return(indexVec);
+}
+*/
+
+int *getStateIndex(int nNodes, int nStimuli, int* indexStimuli )
+{
+	int *indexVec=malloc(nNodes*sizeof(int));
+	int j,i;
+	int stateNumber=0;
+	
+	for(i=0; i<nNodes; i++)
+	{
+		indexVec[i] = stateNumber;  // sets state index
+		
+		// set to -1 if it is a stimuli and not a state
+		for(j=0; j<nStimuli; j++)
+		{
+			if(i == indexStimuli[j]-1 ) //indexStim[j]-1: indexStim starts from 1
+				indexVec[i]=-1;  
+		}
+	
+		if(indexVec[i]!=-1) ++stateNumber;
+		
+	}
+	if(DEBUG){
+		printf("State Index\n");
+		for (j = 0; j < nNodes; j++)
+		{
+			printf("species %d \t\t index %d\n",j,indexVec[j]);
+		}
+	}
+	
+	return(indexVec);
 }

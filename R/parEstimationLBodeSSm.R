@@ -32,6 +32,8 @@ parEstimationLBodeSSm <-function
 	optimiser instead.");
 
 
+	checkSignals(CNOlist=cnolist,model=model)
+	
 	adjMat=incidence2Adjacency(model);
 	if(is.null(ode_parameters)){
 		ode_parameters=createLBodeContPars(model,random=TRUE);

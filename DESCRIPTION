@@ -3,7 +3,7 @@ Type: Package
 Title: Modified version of ODE add-on to CellNOptR
 Version: 2.0.0
 Date: 2018-07-3
-Author: David Henriques, Thomas Cokelaer, Federica Eduati
+Author: David Henriques, Thomas Cokelaer, Federica Eduati, Attila Gabor
 Maintainer: David Henriques <davidpcnet@hotmail.com>
 biocViews: CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
 Description: Logic based ordinary differential equation (ODE) add-on to
