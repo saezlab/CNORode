@@ -107,8 +107,9 @@ packages. Therefore, in order to install \emph{CNORode}, open a R
 session and type:
 
 <<installCNOR, eval=FALSE, pgf=TRUE, echo=TRUE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite("CNORode")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("CNORode")
 @
 
 It may take a few minutes to install all dependencies if you start from scratch
