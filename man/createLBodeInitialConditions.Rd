@@ -7,22 +7,38 @@
 createLBodeInitialConditions(model, data, initialValue = 0,
   useMeasurements = TRUE)
 }
+\arguments{
+\item{model}{a model list created by readSIF and optionally be preprocessing}
+
+\item{data}{a cnolist created from the MIDAS file}
+
+\item{initialValue}{in case of a scalar, all states in all experimental conditions
+are set to this value. In case of a matrix with nExps rows and nSpecies columns then the initial
+values are set accorsingly. See useMeasurements argument for further details.}
+
+\item{useMeasurements}{logical, if TRUE (default) then the initial values of the measured nodes are 
+set based on the measured data.}
+}
+\value{
+numerical matrix with nExps rows and nSpecies columns
+}
 \description{
 create a matrix of initial conditions for all state variables.
 }
 \details{
 creating an initial condition matrix gives more flexibility to the user to define
 indicidual values. In earlier versions all non-measured nodes were set to 0.5
- or 0.1, depending on the implementation. 
- @param model a model list created by readSIF and optionally be preprocessing
- @param data a cnolist created from the MIDAS file
- @param initialValue in case of a scalar, all states in all experimental conditions
- are set to this value. In case of a matrix with nExps rows and nSpecies columns then the initial
- values are set accorsingly. See useMeasurements argument for further details.
- @param useMeasurements logical, if TRUE (default) then the initial values of the measured nodes are 
- set based on the measured data.
- @return numerical matrix with nExps rows and nSpecies columns
- @export 
- @author A.Gabor
+ or 0.1, depending on the implementation.
+}
+\examples{
+\dontrun{
+initValue1 = createLBodeInitialConditions(model = model,data = cnodata, initialValue = 0.2)
+S1 = getLBodeModelSim(cnolist = cnodata,model = model,ode_parameters = ode_parameters,initialValueMatrix = initValue1)
+plotLBodeModelSim(cnolist = cnodata,model = model,ode_parameters = ode_parameters, initialValueMatrix =  initValue1)
+}
+
+}
+\author{
+A.Gabor
 }
 
