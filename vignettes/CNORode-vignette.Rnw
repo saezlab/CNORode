@@ -107,8 +107,9 @@ packages. Therefore, in order to install \emph{CNORode}, open a R
 session and type:
 
 <<installCNOR, eval=FALSE, pgf=TRUE, echo=TRUE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite("CNORode")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("CNORode")
 @
 
 It may take a few minutes to install all dependencies if you start from scratch
@@ -167,9 +168,9 @@ should type the following commands:
 % show data and model loading
 <<quickstart, eval=TRUE, results=hide>>=
 	library(CNORode)
-	model=readSIF(system.file("doc", "ToyModelMMB_FeedbackAnd.sif",
+	model=readSIF(system.file("extdata", "ToyModelMMB_FeedbackAnd.sif",
 		package="CNORode"));
-	cno_data=readMIDAS(system.file("doc", "ToyModelMMB_FeedbackAnd.csv",
+	cno_data=readMIDAS(system.file("extdata", "ToyModelMMB_FeedbackAnd.csv",
 		package="CNORode"));
 	cnolist=makeCNOlist(cno_data,subfield=FALSE);
 @
@@ -261,11 +262,35 @@ opt_pars=parEstimationLBode(cnolist,model,ode_parameters=initial_pars,
 simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 @
 
+Model optimisation using eSS:
+<<eval=TRUE, results=hide>>=
+initial_pars=createLBodeContPars(model,
+	LB_n = 1, LB_k = 0.1, LB_tau = 0.01, UB_n = 5,
+	UB_k = 0.9, UB_tau = 10, random = TRUE)
+#Visualize initial solution
+
+fit_result_ess = 
+	parEstimationLBodeSSm(cnolist = cnolist,
+						  model = model,
+						  ode_parameters = initial_pars,
+						  maxeval = 1e5,
+						  maxtime = 20,
+						  local_solver = "DHC",
+						  transfer_function = 3
+	)
+#Visualize fitted solution
+# simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=fit_result_ess)
+@
+
+
+
 \begin{center}
 \begin{figure}[ht]
 
 <<label=plotInit,include=TRUE,fig=TRUE>>=
-	simulatedData=plotLBodeFitness(cnolist, model,initial_pars)
+	simulatedData=plotLBodeFitness(cnolist, model,
+								   initial_pars,
+								   transfer_function = 3)
 @
 \caption{The initial solution before optimization. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
 The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
@@ -279,7 +304,9 @@ gives an indication of squared difference where red means high error and white l
 \begin{figure}[ht]
 \begin{center}
 <<label=plotFinalFit_fit,include=TRUE,fig=TRUE>>=
-	simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
+	simulatedData=plotLBodeFitness(cnolist, model,
+								   ode_parameters=fit_result_ess,
+								   transfer_function = 3)
 @
 \end{center}
 \caption{A solution obtained by optimization with a genetic algorithm.Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
