@@ -2,52 +2,72 @@
 % Please edit documentation in R/runCNORode.R
 \name{runCNORode}
 \alias{runCNORode}
-\title{title runCNORprob}
+\title{runCNORode}
 \usage{
-runCNORode(model, data, compression = FALSE, cutNONC = TRUE,
-  ProbExpandOR = FALSE, ORlist = NULL, ProbHardConstraint = F,
-  ProbForce = F, optRound_optim = 3, L1Reg = 1e-04, MaxTime = 180,
-  HLbound = 0.5, SSthresh = 2e-16, printCost = 0,
-  PlotIterations = 1, SaveOptResults = TRUE, rho = 1,
-  outer.iter = 100, inner.iter = 100, delta = 1e-07, tol = 1e-08,
-  trace = 1, Analysis_edgeKO = T, Analysis_nodeKO = T,
-  Analysis_LPSA = T, Analysis_BS = T, optRound_analysis = 1,
-  LPSA_Increments = 2, BS_Type = 1, BS_Round = 5)
+runCNORode(model, data, compression = TRUE,
+  results_folder = "CNORode_results", cutNONC = TRUE,
+  expansion = FALSE, LB_n = 1, LB_k = 0.1, LB_tau = 0.01,
+  UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3,
+  default_k = 0.5, default_tau = 1, opt_n = TRUE, opt_k = TRUE,
+  opt_tau = TRUE, random = TRUE, maxeval = 1e+05, maxtime = 60,
+  transfer_function = 3, nan_fac = 1, lambda_tau = 0, lambda_k = 0)
+}
+\arguments{
+\item{model}{A filename of prior knowledge network (PKN) in the SIF format}
+
+\item{data}{A measurement filename in the MIDAS format}
+
+\item{compression}{compress the prior knowledge network (TRUE), see \code{\link{preprocessing}}}
+
+\item{results_folder}{results folder for the analysis.}
+
+\item{cutNONC}{cut non-observable non-controllable node from PKN (TRUE), see \code{\link{preprocessing}}}
+
+\item{expansion}{expand OR gates in the PKN (FALSE), see \code{\link{preprocessing}}}
+
+\item{LB_n}{lower bound on parameter n, see \code{\link{createLBodeContPars}}}
+
+\item{LB_k}{lower bound on parameter k, see \code{\link{createLBodeContPars}}}
+
+\item{LB_tau}{lower bound on parameter tau, see \code{\link{createLBodeContPars}}}
+
+\item{UB_n}{upper bound on parameter n, see \code{\link{createLBodeContPars}}}
+
+\item{UB_k}{upper bound on parameter k, see \code{\link{createLBodeContPars}}}
+
+\item{UB_tau}{upper bound on parameter tau, see \code{\link{createLBodeContPars}}}
+
+\item{default_n}{default value of parameter n, see \code{\link{createLBodeContPars}}}
+
+\item{default_k}{default value of parameter k, see \code{\link{createLBodeContPars}}}
+
+\item{default_tau}{default value of parameter tau, see \code{\link{createLBodeContPars}}}
+
+\item{opt_n}{should parameter n be optimised, see \code{\link{createLBodeContPars}}}
+
+\item{opt_k}{should parameter k be optimised, see \code{\link{createLBodeContPars}}}
+
+\item{opt_tau}{should parameter tau be optimised, see \code{\link{createLBodeContPars}}}
+
+\item{random}{initial parameter vector generation (TRUE: random, FALSE: half of the LB-UB)}
+
+\item{maxeval}{maximum number of funciton evaluations in the optimisation, see \code{\link{parEstimationLBodeSSm}}}
+
+\item{maxtime}{maximum CPU time (in seconds) spent on optimisation before calling final refinement, see \code{\link{parEstimationLBodeSSm}}}
+
+\item{transfer_function}{trandfer function types represented by the edges, see \code{\link{parEstimationLBodeSSm}}}
+
+\item{nan_fac}{penalty for NA simulations, see \code{\link{parEstimationLBodeSSm}}}
+
+\item{lambda_tau}{regularisation penalty for tau parameters, see \code{\link{parEstimationLBodeSSm}}}
+
+\item{lambda_k}{regularisation penalty for k parameters for optimisation, see \code{\link{parEstimationLBodeSSm}}}
 }
 \description{
-description A one-linear wrapper of the CNORprob pipeline
+A one-line wrapper of the CNORode pipeline
 }
-\details{
-param model A filename of prior knowledge network (PKN) in the SIF format
-param data A measurement filename in the MIDAS format
-param compression compre 
-param ProbCutNONC A variable to define whether to cut non-observable non-controllable node from PKN
-param ProbExpandOR A variable to define whether to expand OR gate in the CNOR format
-param ORlist A list of interaction with OR gate (leave NULL is none)
-param ProbHardConstraint Apply hard constraints on probability parameters (sum of all activatory edges = 1)
-param ProbForce A variable to define whether to force all single activatory edge to a node to always be 1
-param optRound_optim Number of rounds for optimisation
-param L1Reg Weight for L1-regularisation
-param MaxTime Time for each round of optimisation (seconds)
-param HLbound A cut-off for high and low weights
-param SSthresh A cut-off for states' difference to define whether steady-state is reached
-param printCost A variable to select whether to print or not to print intermediate fitting cost (0,1)
-param PlotIterations Number of rounds for optimisation to generate plots
-param SaveOptResults A variable to define whether to generate reports from optimisation (TRUE,FALSE)
-param rho Penalty weighting scaler / default = 1
-param outer.iter Maximum major iterations / default = 400
-param inner.iter Maximum minor iterations / default = 800
-param delta Relative step size eval. / default = 1e-7
-param tol Relative tol. for optim. / default = 1e-8
-param iter Print objfunc every itereration / default = 1
-param Analysis_edgeKO Perform edge KO analysis (T/F)
-param Analysis_nodeKO Perform node KO analysis (T/F)
-param Analysis_LPSA Perform local parameter sensitivity analysis (T/F)
-param Analysis_BS Perform bootstrapping analysis (T/F)
-param optRound_analysis Number of rounds for optmisation in each post-optimisation analysis
-param LPSA_Increments Number of increments in LPSA analysis
-param BS_Type Type of Bootstrapping (1=resample with replacement from residual; 2=resampling from mean & variant)
-param BS_Round Number of rounds for bootstrapping
-
-export
+\examples{
+model = system.file("extdata", "ToyModelMMB_FeedbackAnd.sif",package="CNORode")
+data = system.file("extdata", "ToyModelMMB_FeedbackAnd.csv", package="CNORode")
+res = runCNORode(model,data,results_folder = "./results")
 }
