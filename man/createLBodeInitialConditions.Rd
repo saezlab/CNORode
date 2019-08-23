@@ -41,4 +41,3 @@ plotLBodeModelSim(cnolist = cnodata,model = model,ode_parameters = ode_parameter
 \author{
 A.Gabor
 }
-

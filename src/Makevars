@@ -1,3 +1,4 @@
-PKG_CFLAGS = -I./include 
-CFLAGS = -Wno-format-security
-CPPFLAGS = -Wformat=0
+PKG_CFLAGS=-I./include 
+CFLAGS=-Wno-format-security
+CPPFLAGS=-Wformat=0
+

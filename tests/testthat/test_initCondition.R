@@ -2,14 +2,15 @@ context("initial conditions for logicODEs")
 library(CNORode)
 
 load_test_case = function(){
-	cnodata = CNOlist("../../data/ToyModel_PB/ToyModelPB.csv")
-	pkn_dataGen= readSIF("../../data/ToyModel_PB/ToyModelPB_TRUE.sif")
+	
+	cnodata = CNOlist(system.file("testdata/ToyModelPB_csv",package="CNORode"))
+	pkn_dataGen= readSIF(system.file("testdata/ToyModelPB_TRUE_sif",package="CNORode"))
 	model = preprocessing(cnodata,pkn_dataGen,expansion = F, compression = F)
 	
 	ode_parameters=createLBodeContPars(model, LB_n = 1, LB_k = 0,
 									   LB_tau = 0, UB_n = 5, UB_k = 5, UB_tau = 10, default_n = 3,
 									   default_k = 0.5, default_tau = 0.01, opt_n = TRUE, opt_k = TRUE,
-									   opt_tau = TRUE, random = TRUE)
+									   opt_tau = TRUE, random = FALSE)
 	
 	
 	res = list()
@@ -105,6 +106,6 @@ test_that("call objective function", {
 							boot_seed=0,
 							initialValueMatrix = initValue1)
 	
-	expect_true( (objFun(x = ode_parameters$parValues) > 77.25273) && (objFun(x = ode_parameters$parValues) < 77.25276))
+	expect_true( (objFun(x = ode_parameters$parValues) > 134) && (objFun(x = ode_parameters$parValues) < 135))
 })
 
