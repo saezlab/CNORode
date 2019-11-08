@@ -118,14 +118,16 @@ Linux system, some of these packages necessitate the R-devel package to be
 installed (e.g., under Fedora type \emph{sudo yum install R-devel}).
 
 Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This algorithm
-algorithm is part of the MEIGOR toolbox. Although this package is
-not available on BioConductor, it can be downloaded from
-\url{http://www.ebi.ac.uk/saezrodriguez/cno/downloads.html}. Once downloaded, install
+algorithm is part of the MEIGOR toolbox which is available on BioConductor and it can be downloaded from
+\url{https://www.bioconductor.org/packages/release/bioc/html/MEIGOR.html}. Once downloaded, install
 MEIGOR by typing:
 
 
 <<installMEIGOR, eval=FALSE>>=
-install.packages("MEIGOR_0.99.3_svn2444.tar.gz",type="source")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("MEIGOR")
 @
 
 Note "\~/" should point to the directory where the file is saved.
@@ -150,7 +152,7 @@ Please note that a PKN can also be used as Boolean model which will contain only
 
 Detailed information about the model used here (ToyModelMMB\_FeedbackAnd) and additional models can be found at:
 
-\url{http://www.ebi.ac.uk/~cokelaer/cno/doc/sampleModels/}
+\url{https://saezlab.github.io/CellNOptR/5_Models%20and%20Documentation/}
 
 \begin{center}
 \begin{figure}[ht]
@@ -340,6 +342,73 @@ Results<-CeSSR(problem,opts,Inf,Inf,3,TRUE,global_save_list=c('cnolist','model',
 'initial_pars'))
 @
 
+\section{Crossvalidation}
+
+CNORode offers the possibility to perform a k-fold cross-validation for logic-ode models in order to assess the predictive performance of our models. In k-iterations a  fraction of the data is eliminated from the CNOlist. The model is trained on the  remaining data and then the model predicts the held-out data. Then the prediction accuracy is reported for each iteration. Three different re-sampling strategies about how we can split the training and the test set: \emph{1)}Re-sampling of the data-points, \emph{2)}Re-sampling of the experimental conditions and \emph{3)}Resampling of the observable nodes.
+
+In the example below, we show an example about how we can apply the cross-validation analysis over a small toy case-study from Macnamara et al. 2012.
+
+<<eval=FALSE>>=
+library(CellNOptR)
+library(CNORode)
+library(MEIGOR)
+
+# MacNamara et al. 2012 case study:
+pknmodel = readSIF("PKN-ToyPB.sif.txt")
+cnolist = CNOlist("MD-ToyPB.csv")
+
+# original and preprocessed network 
+plotModel(pknmodel,cnolist)
+model = preprocessing(data = cnolist,model = pknmodel,compression = T,expansion = T)
+plotModel(model,cnolist)
+plotCNOlist(CNOlist = cnolist)
+
+# set initial parameters 
+ode_parameters=createLBodeContPars(model, LB_n = 1, LB_k = 0,
+                                   LB_tau = 0, UB_n = 4, UB_k = 1, UB_tau = 1, default_n = 3,
+                                   default_k = 0.5, default_tau = 0.01, opt_n = FALSE, opt_k = TRUE,
+                                   opt_tau = TRUE, random = TRUE)
+
+## Parameter Optimization
+# essm
+paramsSSm=defaultParametersSSm()
+paramsSSm$local_solver = "DHC"
+paramsSSm$maxtime = 600;
+paramsSSm$maxeval = Inf;
+paramsSSm$atol=1e-6;
+paramsSSm$reltol=1e-6;
+paramsSSm$nan_fac=0;
+paramsSSm$dim_refset=30;
+paramsSSm$n_diverse=1000;
+paramsSSm$maxStepSize=Inf;
+paramsSSm$maxNumSteps=10000;
+transferFun=4;
+paramsSSm$transfer_function = transferFun;
+
+paramsSSm$lambda_tau=0
+paramsSSm$lambda_k=0
+paramsSSm$bootstrap=F
+paramsSSm$SSpenalty_fac=0
+paramsSSm$SScontrolPenalty_fac=0
+
+# run the optimisation algorithm
+opt_pars=parEstimationLBode(cnolist,model, method="essm", ode_parameters=ode_parameters, 
+                            paramsSSm=paramsSSm)
+plotLBodeFitness(cnolist = cnolist, model = model, ode_parameters = opt_pars, 
+                  transfer_function = 4)
+
+# 10-fold crossvalidation using T1 data
+# We use only T1 data for crossvalidation, because data in the T0 matrix is not independent.
+# All rows of data in T0 describes the basal condition.
+
+# Crossvalidation produce some text in the command window:  
+library(doParallel)
+registerDoParallel(cores=3)
+R=crossvalidateODE(CNOlist = cnolist, model = model, type="datapoint", nfolds=3, parallel = TRUE, ode_parameters = ode_parameters, paramsSSm = paramsSSm)
+@
+
+For more, please information about the \emph{crossvalidateODE} function, please check its documentation.
+
 \begin{thebibliography}{}
 
 \bibitem{CellNOptR}
@@ -401,6 +470,11 @@ R. Serban and A. C. Hindmarsh
 \newblock"CVODES: the Sensitivity\-Enabled ODE Solver in SUNDIALS,"
 \newblock Proceedings of IDETC/CIE 2005, Sept. 2005, Long Beach, CA. Also available as LLNL
 technical report UCRL\-JP\-200039.
+
+\bibitem{macnamara_2012}
+A. MacNamara, C. Terfve, D. Henriques, B.P. Bernabe, and J. Saez-Rodriguez.
+\newblock State-time spectrum of signal transduction logic models.
+\newblock Phys Biol., 9(4):045003, 2012.
 
 \end{thebibliography}
 
