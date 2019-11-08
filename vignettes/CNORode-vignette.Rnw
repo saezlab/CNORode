@@ -354,19 +354,21 @@ library(CNORode)
 library(MEIGOR)
 
 # MacNamara et al. 2012 case study:
-pknmodel = readSIF("PKN-ToyPB.sif.txt")
-cnolist = CNOlist("MD-ToyPB.csv")
+data("PKN-ToyPB.RData", package="CNORode")
+data("MD-ToyPB.RData", package="CNORode")
 
 # original and preprocessed network 
-plotModel(pknmodel,cnolist)
-model = preprocessing(data = cnolist,model = pknmodel,compression = T,expansion = T)
-plotModel(model,cnolist)
+plotModel(pknmodel, cnolist)
+model = preprocessing(data = cnolist, model = pknmodel,
+                      compression = T, expansion = T)
+plotModel(model, cnolist)
 plotCNOlist(CNOlist = cnolist)
 
 # set initial parameters 
 ode_parameters=createLBodeContPars(model, LB_n = 1, LB_k = 0,
-                                   LB_tau = 0, UB_n = 4, UB_k = 1, UB_tau = 1, default_n = 3,
-                                   default_k = 0.5, default_tau = 0.01, opt_n = FALSE, opt_k = TRUE,
+                                   LB_tau = 0, UB_n = 4, UB_k = 1, 
+                                   UB_tau = 1, default_n = 3, default_k = 0.5, 
+                                   default_tau = 0.01, opt_n = FALSE, opt_k = TRUE,
                                    opt_tau = TRUE, random = TRUE)
 
 ## Parameter Optimization
@@ -392,19 +394,22 @@ paramsSSm$SSpenalty_fac=0
 paramsSSm$SScontrolPenalty_fac=0
 
 # run the optimisation algorithm
-opt_pars=parEstimationLBode(cnolist,model, method="essm", ode_parameters=ode_parameters, 
-                            paramsSSm=paramsSSm)
-plotLBodeFitness(cnolist = cnolist, model = model, ode_parameters = opt_pars, 
-                  transfer_function = 4)
+opt_pars=parEstimationLBode(cnolist,model, method="essm", 
+                            ode_parameters=ode_parameters, paramsSSm=paramsSSm)
+plotLBodeFitness(cnolist = cnolist, model = model, 
+                 ode_parameters = opt_pars, transfer_function = 4)
 
 # 10-fold crossvalidation using T1 data
-# We use only T1 data for crossvalidation, because data in the T0 matrix is not independent.
+# We use only T1 data for crossvalidation, because data 
+# in the T0 matrix is not independent.
 # All rows of data in T0 describes the basal condition.
 
 # Crossvalidation produce some text in the command window:  
 library(doParallel)
 registerDoParallel(cores=3)
-R=crossvalidateODE(CNOlist = cnolist, model = model, type="datapoint", nfolds=3, parallel = TRUE, ode_parameters = ode_parameters, paramsSSm = paramsSSm)
+R=crossvalidateODE(CNOlist = cnolist, model = model, 
+                   type="datapoint", nfolds=3, parallel = TRUE, 
+                   ode_parameters = ode_parameters, paramsSSm = paramsSSm)
 @
 
 For more, please information about the \emph{crossvalidateODE} function, please check its documentation.
