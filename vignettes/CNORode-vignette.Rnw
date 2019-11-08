@@ -354,8 +354,8 @@ library(CNORode)
 library(MEIGOR)
 
 # MacNamara et al. 2012 case study:
-data("PKN-ToyPB.RData", package="CNORode")
-data("MD-ToyPB.RData", package="CNORode")
+pknmodel = readSIF("PKN-ToyPB.sif.txt")
+cnolist = CNOlist("MD-ToyPB.csv")
 
 # original and preprocessed network 
 plotModel(pknmodel, cnolist)
