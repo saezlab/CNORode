@@ -358,11 +358,11 @@ data(PKN_ToyPB, package="CellNOptR")
 data(CNOlist_ToyPB, package="CellNOptR")
 
 # original and preprocessed network 
-plotModel(pknmodel, cnolist)
-model = preprocessing(data = cnolist, model = pknmodel,
+plotModel(pknmodel, cnodata)
+model = preprocessing(data = cnodata, model = pknmodel,
                       compression = T, expansion = T)
-plotModel(model, cnolist)
-plotCNOlist(CNOlist = cnolist)
+plotModel(model, cnodata)
+plotCNOlist(CNOlist = cnodata)
 
 # set initial parameters 
 ode_parameters=createLBodeContPars(model, LB_n = 1, LB_k = 0,
@@ -394,9 +394,9 @@ paramsSSm$SSpenalty_fac=0
 paramsSSm$SScontrolPenalty_fac=0
 
 # run the optimisation algorithm
-opt_pars=parEstimationLBode(cnolist,model, method="essm", 
+opt_pars=parEstimationLBode(cnodata,model, method="essm", 
                             ode_parameters=ode_parameters, paramsSSm=paramsSSm)
-plotLBodeFitness(cnolist = cnolist, model = model, 
+plotLBodeFitness(cnolist = cnodata, model = model, 
                  ode_parameters = opt_pars, transfer_function = 4)
 
 # 10-fold crossvalidation using T1 data
@@ -407,7 +407,7 @@ plotLBodeFitness(cnolist = cnolist, model = model,
 # Crossvalidation produce some text in the command window:  
 library(doParallel)
 registerDoParallel(cores=3)
-R=crossvalidateODE(CNOlist = cnolist, model = model, 
+R=crossvalidateODE(CNOlist = cnodata, model = model, 
                    type="datapoint", nfolds=3, parallel = TRUE, 
                    ode_parameters = ode_parameters, paramsSSm = paramsSSm)
 @
