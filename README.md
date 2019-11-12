@@ -42,7 +42,7 @@ install_github("saezlab/CNORode")
 Install the developement version of CNORode:
 ```R
 library(devtools)
-install_github("saezlab/CNORode",ref="dev")
+install_github("saezlab/CNORode",ref="crossval", build_vignettes = TRUE)
 ```
 
 
