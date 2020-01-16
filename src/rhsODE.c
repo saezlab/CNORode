@@ -5,7 +5,7 @@
 #include <cvodes/cvodes.h>          /* prototypes for CVODES fcts. and consts. */
 #include <sundials/sundials_types.h> /* definition of type realtype */
 #include "CNOStructure.h"
-#include <nvector/nvector_serial.h>/* serial N_Vector types, fcts., and macros */
+#include "./include/nvector/nvector_serial.h"/* serial N_Vector types, fcts., and macros */
 
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
 #define DEBUG 0

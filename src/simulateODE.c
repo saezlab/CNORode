@@ -6,7 +6,7 @@
 /* Sundials Header Files */
 
 #include <cvodes/cvodes.h>
-#include <nvector/nvector_serial.h>
+#include "./include/nvector/nvector_serial.h"
 #include <sundials/sundials_types.h>
 #include <sundials/sundials_math.h>
 
