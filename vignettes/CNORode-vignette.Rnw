@@ -118,17 +118,16 @@ Linux system, some of these packages necessitate the R-devel package to be
 installed (e.g., under Fedora type \emph{sudo yum install R-devel}).
 
 Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This algorithm
-algorithm is part of the MEIGOR toolbox. Although this package is
-not available on BioConductor, it can be downloaded from
-\url{http://www.ebi.ac.uk/saezrodriguez/cno/downloads.html}. Once downloaded, install
-MEIGOR by typing:
+algorithm is part of the MEIGOR toolbox. MEIGOR can be found on Bioconductor: 
 
 
 <<installMEIGOR, eval=FALSE>>=
-install.packages("MEIGOR_0.99.3_svn2444.tar.gz",type="source")
-@
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-Note "\~/" should point to the directory where the file is saved.
+BiocManager::install("MEIGOR")
+
+@
 
 Finally, once \emph{CNORode} is installed you can load it by typing:
 
@@ -150,7 +149,7 @@ Please note that a PKN can also be used as Boolean model which will contain only
 
 Detailed information about the model used here (ToyModelMMB\_FeedbackAnd) and additional models can be found at:
 
-\url{http://www.ebi.ac.uk/~cokelaer/cno/doc/sampleModels/}
+\url{www.cellnopt.org}
 
 \begin{center}
 \begin{figure}[ht]
@@ -264,6 +263,12 @@ simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 
 Model optimisation using eSS:
 <<eval=TRUE, results=hide>>=
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("MEIGOR")
+
+
 initial_pars=createLBodeContPars(model,
 	LB_n = 1, LB_k = 0.1, LB_tau = 0.01, UB_n = 5,
 	UB_k = 0.9, UB_tau = 10, random = TRUE)
@@ -309,7 +314,7 @@ gives an indication of squared difference where red means high error and white l
 								   transfer_function = 3)
 @
 \end{center}
-\caption{A solution obtained by optimization with a genetic algorithm.Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
+\caption{A solution obtained by optimization with a genetic algorithm. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
 The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
 gives an indication of squared difference where red means high error and white low error.}
 \label{fig:plotFinalFit}
