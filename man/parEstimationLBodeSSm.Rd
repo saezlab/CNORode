@@ -16,7 +16,9 @@
 	parEstimationLBodeSSm(cnolist, model, ode_parameters = NULL, indices = NULL, 
 	maxeval = Inf, maxtime = 100, ndiverse = NULL, dim_refset = NULL, local_solver = NULL,
 	time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
-	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1)
+	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1,
+	lambda_tau = 0, lambda_k = 0, bootstrap = FALSE, SSpenalty_fac = 0, 
+    SScontrolPenalty_fac = 0, boot_seed = 1234)
 }
 %- maybe also 'usage' for other objects documented here.
 
@@ -79,6 +81,32 @@
 		A penalty for each data point the model is not able to simulate. We recommend higher than
 		0 and smaller that 1.
 	}
+	\item{lambda_tau}{
+		penalty parameter for node parameters (tau)
+	}
+	\item{lambda_k}{
+		penalty parameter for edge parameters (k)
+	}
+	\item{bootstrap}{
+		Boolean, default: FALSE. If the residuals should be bootstrapped. 
+	}
+	\item{SSpenalty_fac}{
+		Steady-state penalty: at the end of the simulation the model states should 
+		reach steady state. The steady state is measured by the sum of sqares of the 
+		state derivatives. 
+	}
+	\item{SScontrolPenalty_fac}{
+		Steady-state penalty for a control experiment, the default is 0.
+		The first condition should represent a control condition 
+		(no stimulus or inhibition). Then the model
+		simulation is penalised if it deviates from the initial conditions. This is 
+		to make sure that the predicted dynamics is not due to the initial conditions, 
+		but becuase of the stimuli.
+	}
+	\item{boot_seed}{
+		random seed used for the bootsrapping. 
+	}
+      
 }
 
 \details{

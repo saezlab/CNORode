@@ -117,11 +117,11 @@ It may take a few minutes to install all dependencies if you start from scratch
 Linux system, some of these packages necessitate the R-devel package to be
 installed (e.g., under Fedora type \emph{sudo yum install R-devel}).
 
-Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This algorithm
-algorithm is part of the MEIGOR toolbox which is available on BioConductor and it can be downloaded from
-\url{https://www.bioconductor.org/packages/release/bioc/html/MEIGOR.html}. Once downloaded, install
-MEIGOR by typing:
-
+Additionally, for parameter estimation we recommend the use of \emph{eSSR}. This
+algorithm  is part of the MEIGOR toolbox which is available on BioConductor and
+it can be downloaded from
+\url{https://www.bioconductor.org/packages/release/bioc/html/MEIGOR.html}. 
+MEIGOR can be installed by typing
 
 <<installMEIGOR, eval=FALSE>>=
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -129,8 +129,6 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 BiocManager::install("MEIGOR")
 @
-
-Note "\~/" should point to the directory where the file is saved.
 
 Finally, once \emph{CNORode} is installed you can load it by typing:
 
@@ -151,8 +149,8 @@ the result of calibrating a \textit{prior knowledge network}(PKN) with \emph{Cel
 Please note that a PKN can also be used as Boolean model which will contain only OR type gates.
 
 Detailed information about the model used here (ToyModelMMB\_FeedbackAnd) and additional models can be found at:
-
 \url{https://saezlab.github.io/CellNOptR/5_Models%20and%20Documentation/}
+
 
 \begin{center}
 \begin{figure}[ht]
@@ -266,6 +264,10 @@ simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 
 Model optimisation using eSS:
 <<eval=TRUE, results=hide>>=
+
+requireNamespace("MEIGOR")
+
+
 initial_pars=createLBodeContPars(model,
 	LB_n = 1, LB_k = 0.1, LB_tau = 0.01, UB_n = 5,
 	UB_k = 0.9, UB_tau = 10, random = TRUE)
@@ -311,7 +313,7 @@ gives an indication of squared difference where red means high error and white l
 								   transfer_function = 3)
 @
 \end{center}
-\caption{A solution obtained by optimization with a genetic algorithm.Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
+\caption{A solution obtained by optimization with a genetic algorithm. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
 The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
 gives an indication of squared difference where red means high error and white low error.}
 \label{fig:plotFinalFit}

@@ -20,4 +20,7 @@ export(runCNORode)
 export(simdata2cnolist)
 export(simulate)
 export(crossvalidateODE)
+
+import(CellNOptR)
+
 useDynLib(CNORode,sim_logic_ode)
