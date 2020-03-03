@@ -67,7 +67,9 @@ runCNORode(model, data, compression = TRUE,
 A one-line wrapper of the CNORode pipeline
 }
 \examples{
+\dontrun{
 model = system.file("extdata", "ToyModelMMB_FeedbackAnd.sif",package="CNORode")
 data = system.file("extdata", "ToyModelMMB_FeedbackAnd.csv", package="CNORode")
 res = runCNORode(model,data,results_folder = "./results")
+}
 }

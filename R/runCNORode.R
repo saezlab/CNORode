@@ -30,9 +30,12 @@
 #' @param lambda_k regularisation penalty for k parameters for optimisation, see \code{\link{parEstimationLBodeSSm}}
 #' 
 #' @examples
+#' \dontrun{
 #' model = system.file("extdata", "ToyModelMMB_FeedbackAnd.sif",package="CNORode")
 #' data = system.file("extdata", "ToyModelMMB_FeedbackAnd.csv", package="CNORode")
 #' res = runCNORode(model,data,results_folder = "./results")
+#' }
+#' @import CellNOptR
 #' @export
 
 runCNORode <- function(model,
@@ -122,7 +125,7 @@ runCNORode <- function(model,
 	output$model_siulation = simulatedData
 	
 	
-	save(file.path(results_folder,"CNORode_PostHocResults.Rdata"))
+	save(output, file = file.path(results_folder,"CNORode_PostHocResults.Rdata"))
 	
 	return(output)
 }
