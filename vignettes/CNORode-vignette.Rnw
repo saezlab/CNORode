@@ -263,10 +263,8 @@ simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 
 Model optimisation using eSS:
 <<eval=TRUE, results=hide>>=
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
 
-BiocManager::install("MEIGOR")
+requireNamespace("MEIGOR")
 
 
 initial_pars=createLBodeContPars(model,

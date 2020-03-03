@@ -13,5 +13,5 @@ LazyLoad: yes
 Depends:
     CellNOptR,
     genalg
-Enhances: MEIGOR
+Suggests: MEIGOR
 RoxygenNote: 6.1.1
