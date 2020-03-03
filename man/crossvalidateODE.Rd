@@ -54,12 +54,14 @@ This function returns a list with elements:
 A. Gabor, E. Gjerga
 }
 \examples{
+\dontrun{
 library(CellNOptR)
-library(CNORode)
+library(doParallel)
 
-# MacNamara et al. 2012 case study:
-pknmodel = readSIF("PKN-ToyPB.sif.txt")
-cnolist = CNOlist("MD-ToyPB.csv")
+data("ToyModel", package="CellNOptR")
+data("CNOlistToy", package="CellNOptR")
+pknmodel = ToyModel
+cnolist = CNOlist(CNOlistToy)
 
 # original and preprocessed network 
 plotModel(pknmodel,cnolist)
@@ -106,9 +108,10 @@ plotLBodeFitness(cnolist = cnolist, model = model, ode_parameters = opt_pars,
 # All rows of data in T0 describes the basal condition.
 
 # Crossvalidation produce some text in the command window:  
-library(doParallel)
 registerDoParallel(cores=3)
-R=crossvalidateODE(CNOlist = cnolist, model = model, type="datapoint", nfolds=3, parallel = TRUE, ode_parameters = ode_parameters, paramsSSm = paramsSSm)
+R=crossvalidateODE(CNOlist = cnolist, model = model, type="datapoint", nfolds=3,
+parallel = TRUE, ode_parameters = ode_parameters, paramsSSm = paramsSSm)
+}
 }
 
 \references{
