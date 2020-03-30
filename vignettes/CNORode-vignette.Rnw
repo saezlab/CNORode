@@ -53,10 +53,14 @@
 	Biochemical Data with Logic-Based Ordinary Differential Equations
 }
 \author[1,2]{David Henriques}
-\author[1]{Thomas Cokelaer \thanks{cokelaer@ebi.ac.uk}}
+\author[1]{Thomas Cokelaer}
+\author[3]{Attila Gabor}
+\author[3,4]{Enio Gjerga \thanks{@enio.gjerga@gmail.com}}
 
 \affil[1]{European Bioinformatics Institute, Saez-Rodriguez group, Cambridge, United Kingdom}
 \affil[2]{Instituto de Investigaciones Marinas-CSIC, Vigo, Spain}
+\affil[3]{Heidelberg University, Faculty of Medicine, Institute for Computational Biomedicine, Bioquant}
+\affil[4]{RWTH Aachen University, Faculty of Medicine, Joint Research Centre for Computational Biomedicine (JRC-COMBINE)}
 
 \begin{document}
 \maketitle
@@ -356,8 +360,8 @@ library(CNORode)
 library(MEIGOR)
 
 # MacNamara et al. 2012 case study:
-data(PKN_ToyPB, package="CellNOptR")
-data(CNOlist_ToyPB, package="CellNOptR")
+data(PKN_ToyPB, package="CNORode")
+data(CNOlist_ToyPB, package="CNORode")
 
 # original and preprocessed network 
 plotModel(pknmodel, cnodata)
