@@ -3,8 +3,8 @@
  Name        : CellNOptODEs.c
  Author      : DH, TC 
  Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Copyright   : GPL-V3
+ Description : 
  ============================================================================
  */
 
@@ -23,16 +23,21 @@
 #include <Rinternals.h>
 #include <R_ext/Print.h>
 
+#define DEBUG 0
+
+double normHill_mod(double x,double n,double k);
 double normHill(double x,double n,double k);
 double hill_function(double x,double n,double k);
 double linear_transfer_function(double x,double n,double k);
+double FG_transfer_function(double x,double n,double k);
 int* getNumInputs(int **adjMatrix,int n);
 int* getNumBits(int* numInputs,int n);
-int *findStates(int **adjMatrix, int n);
+int *findStates(int nNodes, int nStimuli, int* indexStimuli);
 int** getTruthTables(int** adjMat,int** interMat,int** notMat,int* isState,int* nInputs,int *nBits,int nRows,int nCols);
-int *getStateIndex(int **adjMatrix, int n);
+int *getStateIndex(int nNodes, int nStimuli, int* indexStimuli);
+//int *getStateIndex(int **adjMatrix, int n);
 int*** get_support_truth_tables(int n,int *nInputs);
-int simulateODE(CNOStructure* data,	int exp_num,int verbose,double reltol,double atol,double maxStepSize,
+int simulateODE(CNOStructure* data,  int exp_num,int verbose,double reltol,double atol,double maxStepSize,
 int maxNumSteps,int maxErrTestFails);
 int** get_input_index(int** AdjMat,int n,int* numInputs);
 int* get_count_bits(int n,int** truth_tables, int* numBits);
@@ -73,7 +78,8 @@ SEXP sim_logic_ode
 	 double*** simResults;
 	 double* inhibitor_array;
 	 int maxNumInputs=-1;
-
+	 
+	 	
 	 int nRows = INTEGER(nRows_in)[0];
 	 int nCols=INTEGER(nCols_in)[0];
 	 int nSignals=INTEGER(nSignals_in)[0];
@@ -209,8 +215,7 @@ SEXP sim_logic_ode
 	  tempData.nSignals=nSignals;
 	  tempData.nTimes=nTimes;
 	  tempData.nExperiments=0; //not used but required to prevent warnings in MACOSX leopard (bioconductor)
-      tempData.isInput = NULL;  // not used but gets rid of a warning.
-
+	  tempData.isInput=NULL; //not used but required to prevent warnings in MACOSX leopard (bioconductor)
 
 	  //tempData.adjacencyMatrix = getAdjacencyMatrix(tempData.interMat,tempData.nRows,tempData.nCols);
 	  tempData.adjacencyMatrix=adjMatrix;
@@ -223,16 +228,23 @@ SEXP sim_logic_ode
 	  tempData.maxNumInputs=maxNumInputs;
 
 	  tempData.numBits =(int*) getNumBits(tempData.numInputs,tempData.nRows);
-	  tempData.isState =(int*) findStates(tempData.adjacencyMatrix,tempData.nRows);
-
-
+	  tempData.isState =(int*) findStates(tempData.nRows, nStimuli, indexStim);
+	  if(DEBUG){
+	  	printf("\nisState:\n\t");
+	  	for(i=0; i<nRows; i++) 	printf("%d ",tempData.isState[i]);
+	  	printf("\n");
+	  }
+	  
 	  tempData.truthTables =(int**) getTruthTables(tempData.adjacencyMatrix,tempData.interMat,
 	  tempData.notMat,tempData.isState,tempData.numInputs,tempData.numBits,tempData.nRows,tempData.nCols);
 
 	  state_array= (double*)malloc(tempData.nRows*sizeof(double));
 	  inhibitor_array=(double*)malloc((tempData.nRows)*sizeof(double));
 
-	  tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
+	  //tempData.state_index=(int*)getStateIndex(tempData.adjacencyMatrix,tempData.nRows);
+	  tempData.state_index=(int*)getStateIndex(tempData.nRows, nStimuli, indexStim);
+	  
+	  
 	  tempData.inhibitor_array=inhibitor_array;
 	  tempData.state_array=state_array;
 
@@ -258,6 +270,25 @@ SEXP sim_logic_ode
 			  simResults[i][j]=(double*)malloc(tempData.nStates*sizeof(double));
 		  }
 	  }
+	  if(DEBUG){
+	  	printf("----->   size of SimResults is [%d][%d][%d] \n",nExperiments,nTimes,tempData.nStates);
+	  }
+	
+    
+    
+    tempData.ydotf=(double**)malloc(nExperiments*sizeof(double*));
+    for (i = 0; i <nExperiments; ++i){
+  
+            tempData.ydotf[i]=(double*)malloc(tempData.nStates*sizeof(double));
+        
+    }
+
+    tempData.ydot0=(double**)malloc(nExperiments*sizeof(double*));
+    for (i = 0; i <nExperiments; ++i){
+  
+            tempData.ydot0[i]=(double*)malloc(tempData.nStates*sizeof(double));
+        
+    }
 
 	  tempData.support_truth_tables=(int***)get_support_truth_tables(nRows,tempData.numInputs);
 
@@ -267,6 +298,14 @@ SEXP sim_logic_ode
 		  tempData.transfer_function = &linear_transfer_function;
 	  else if(transfer_function==2)
 		  tempData.transfer_function = &hill_function;
+	  else if(transfer_function==5){
+		  //Rprintf("modified norm Hill");
+	  	  tempData.transfer_function = &normHill_mod;
+	  }
+	  else if(transfer_function==4){
+		  //Rprintf("FG funcion rocks");
+		  tempData.transfer_function = &FG_transfer_function;
+	  }
 	  else
 		  tempData.transfer_function = &normHill;
 
@@ -288,22 +327,63 @@ SEXP sim_logic_ode
 	  
 
 	  //Put the data into a LIST
-	  PROTECT(ans = allocVector(VECSXP, nTimes));
+	  PROTECT(ans = allocVector(VECSXP, nTimes+2));
 	  countProtected++;
-	  for (i = 0; i <nTimes; ++i)
+	  for (i = 0; i <nTimes+2; ++i)
 	  {
 		  PROTECT(arg = allocMatrix(REALSXP, nExperiments,nRows));
 		  countProtected++;
 		  counter=0;
-			  for (k = 0; k < nRows; ++k)
-			  {
-				  for (j = 0; j < nExperiments; ++j)
-				  {
-					  if(tempData.isState[k] && experiment_succeed[j])
-					  	  REAL(arg)[counter++]=simResults[j][i][tempData.state_index[k]];
-				  	  else  REAL(arg)[counter++]=NA_REAL;
-				  }
-		  }
+          
+          if(i==(nTimes+1)){
+            for (k = 0; k < nRows; ++k){
+				      for (j = 0; j < nExperiments; ++j){
+            
+					      if(tempData.isState[k] && experiment_succeed[j]){
+                
+					  	    REAL(arg)[counter++]=tempData.ydot0[j][tempData.state_index[k]];
+              
+                }else{
+                
+                  REAL(arg)[counter++]=0;
+                }
+              }
+            }
+          }else if(i==nTimes){
+            
+            for (k = 0; k < nRows; ++k){
+              
+  			      for (j = 0; j < nExperiments; ++j){
+            
+					      if(tempData.isState[k] && experiment_succeed[j]){
+                
+					  	    REAL(arg)[counter++]=tempData.ydotf[j][tempData.state_index[k]];
+              
+                }else{
+                
+                  REAL(arg)[counter++]=0;
+                }
+              }
+            }
+            
+          }else{
+              
+            for (k = 0; k < nRows; ++k){
+				      for (j = 0; j < nExperiments; ++j){
+              
+					      if(tempData.isState[k] && experiment_succeed[j]){
+                
+					  	    REAL(arg)[counter++]=simResults[j][i][tempData.state_index[k]];
+                  
+				  	    }else{
+                  
+                  REAL(arg)[counter++]=NA_REAL;
+                  
+				        }
+				      }
+            }
+          }
+          
 		  SET_VECTOR_ELT(ans,i,arg);
 		  UNPROTECT(1);
 	  }
@@ -322,6 +402,9 @@ SEXP sim_logic_ode
 
 	  for (i = 0; i <nExperiments; ++i)
 	  {
+          free(tempData.ydotf[i]);
+          free(tempData.ydot0[i]);
+
 		  for (j = 0; j <nTimes; ++j)
 		  {
 			  free(simResults[i][j]);
@@ -329,7 +412,8 @@ SEXP sim_logic_ode
 		  free(simResults[i]);
 	  }
 	  free(simResults);
-
+      free(tempData.ydot0);
+    
 	  free(data);
 	  free(indexSig);
 	  free(indexStim);
@@ -377,4 +461,3 @@ SEXP sim_logic_ode
 
 	  return(ans);
 }
-

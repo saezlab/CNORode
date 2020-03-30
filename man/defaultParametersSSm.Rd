@@ -30,10 +30,16 @@
 	\item{maxNumSteps}{1e+05}
 	\item{maxErrTestsFails}{50}
 	\item{nan_fac}{1}	
+	\item{lambda_tau}{0}	
+	\item{lambda_k}{0}	
+	\item{bootstrap}{0}	
+	\item{SSpenalty_fac}{0}	
+	\item{SScontrolPenalty_fac}{0}	
+	\item{boot_seed}{sample(1:10000,1)}	
 }
 
 \author{
-	David Henriques, Thomas Cokelaer
+	David Henriques, Thomas Cokelaer, Federica Eduati
 }
 
 \seealso{

@@ -12,7 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: defaultParametersGA.R 2337 2012-09-06 09:00:07Z davidh $
+#' @export
 defaultParametersSSm <-
 function(){
 
@@ -22,15 +22,23 @@ function(){
     params$ndiverse=NULL
     params$dim_refset=NULL
     params$local_solver=NULL
-	params$verbose = 0
+	  params$verbose = 0
     params$transfer_function = 3
     params$reltol = 1e-04
     params$atol = 0.001
-	params$maxStepSize = Inf
+	  params$maxStepSize = Inf
     params$maxNumSteps = 1e+05
     params$maxErrTestsFails = 50
     params$nan_fac = 1
     params$time = 1 
+    
+    # added for Eduati et al. 2017 paper (with default parameters should be same as original CNORode)
+    params$lambda_tau=0
+    params$lambda_k=0
+    params$bootstrap=F
+    params$SSpenalty_fac=0
+    params$SScontrolPenalty_fac=0
+    params$boot_seed=sample(1:10000,1)
 
     return(params)
 }

@@ -12,19 +12,20 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: $
-
+#' @export
 
 
 
 parEstimationLBodeGA<-function (cnolist, model, ode_parameters = NULL, indices = NULL, 
     mutationChance=NA, popSize=200,iters=100,elitism=NA, time = 1,monitor=TRUE,
 	verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001,
-	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1,
-    initial_state=0.1) 
+	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1) 
 {
 
     if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+	
+	checkSignals(CNOlist=cnolist,model=model)
+	
     adjMat = incidence2Adjacency(model)
     if (is.null(ode_parameters)) {
         ode_parameters = createLBodeContPars(model, random = TRUE)
@@ -34,7 +35,7 @@ parEstimationLBodeGA<-function (cnolist, model, ode_parameters = NULL, indices =
     problem = list()
     f_obj <- getLBodeContObjFunction(cnolist, model, ode_parameters, 
         indices, time, verbose, transfer_function, reltol, atol, 
-        maxStepSize, maxNumSteps, maxErrTestsFails, initial_state)
+        maxStepSize, maxNumSteps, maxErrTestsFails)
     x_L <- ode_parameters$LB[ode_parameters$index_opt_pars]
     x_U <- ode_parameters$UB[ode_parameters$index_opt_pars]
     x_0 <- ode_parameters$parValues[ode_parameters$index_opt_pars]

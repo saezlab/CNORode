@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <nvector/nvector_serial.h>
+#include "./include/nvector/nvector_serial.h"
 #include <sundials/sundials_math.h>
 
 #define ZERO   RCONST(0.0)

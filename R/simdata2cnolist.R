@@ -12,8 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: simdata2cnolist.R 4036 2013-09-24 16:09:40Z bernardo $
-
+#' @export
 simdata2cnolist <- function(sim_data, cnolist, model){ 
 
     if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}

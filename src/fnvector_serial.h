@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#include <nvector/nvector_serial.h>  
+#include "./include/nvector/nvector_serial.h"
 #include <sundials/sundials_fnvector.h>
 
 #if defined(F77_FUNC)

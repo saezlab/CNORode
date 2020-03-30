@@ -6,15 +6,18 @@
 /* Sundials Header Files */
 
 #include <cvodes/cvodes.h>
-#include <nvector/nvector_serial.h>
+#include "./include/nvector/nvector_serial.h"
 #include <sundials/sundials_types.h>
 #include <sundials/sundials_math.h>
 
+int rhsODEF(double t, double* y, double* ydot, void *data);
 
 #include "CNOStructure.h"
 
 #define Ith(v,i) ( NV_DATA_S(v)[i] )
 #define IJth(A,i,j) DENSE_ELEM(A,i,j)
+
+#define DEBUG 0
 
 typedef int rhs_func(realtype t, N_Vector y, N_Vector ydot, void *f_data);
 
@@ -24,7 +27,7 @@ static int check_flag(void *flagvalue, char *funcname, int opt,int verbose);
 
 int simulateODE
 (
-		CNOStructure* data,		int exp_num, 			int verbose,
+  	CNOStructure* data,		int exp_num, 			int verbose,
 		double reltol,			double atol,			double maxStepSize,
 		int maxNumSteps,		int maxErrTestFails
 )
@@ -33,7 +36,12 @@ int simulateODE
 	realtype tout, ti, tf;
 	N_Vector y;
 	void *cvode_mem;
-	
+	double* yf;
+  double* y0;
+  double* ydotf;
+  double* ydot0;
+    
+    
 	cvode_mem = NULL;
 	y = NULL;
 
@@ -49,7 +57,7 @@ int simulateODE
     /* Initialize y */
 	for(i=0; i<(*data).nRows; i++)
 	{
-		(*data).state_array[i] = 0.1;
+		(*data).state_array[i] = 0.5;
 		(*data).inhibitor_array[i]=0;
 	}
 
@@ -86,8 +94,19 @@ int simulateODE
 				}
 			}
 		}
+		
+		
 	}
-
+	
+	if(DEBUG){
+		printf("\nstate_array:\n\t");
+		for(i=0; i<(*data).nRows; ++i)
+		{
+			printf("%f ",(*data).state_array[i]);
+		}
+		printf("\n");
+	}
+	
 	counter=0;
 	for(i=0; i<(*data).nRows; i++)
 	{
@@ -167,15 +186,40 @@ int simulateODE
     CVodeSetMaxErrTestFails(cvode_mem, maxErrTestFails);
 	 
 
+	 if(DEBUG){
+	 	printf("checkpoint 1: exp_num = %d\n",exp_num);
+	 	printf(" i for nTimes\n");
+	 }
     for (i = 1; i < (*data).nTimes; ++i)
     {
+    	if(DEBUG){
+    		printf("%d/%d\n",i,(*data).nTimes);
+    		printf("call CVode\n");
+    	}
+    	
     	tout=(*data).timeSignals[i];
     	flag = CVode(cvode_mem, tout, y, &tf, CV_NORMAL);
-
+    	
+    	if(DEBUG){
+    		printf("CVode passed\n");
+    		printf("read out solutions:\n");
+    	}
+    	
     	for (j = 0; j < (*data).nStates; j++)
     	{
+    		if(DEBUG){
+    			printf("state %d/%d\n",j,(*data).nStates);
+    			printf("call Ith(y,j)\n");
+    			printf("%f\n",(double)Ith(y,j));
+    			printf("%f\n",(double)Ith(y,j));
+    			printf("(*data).sim_results[exp_num][i][j]= (double)Ith(y,j);\n");
+    			printf("(*data).sim_results[%d][%d][%d]= (double)Ith(y,%d);\n", exp_num,i,j,j);
+    		}
     		(*data).sim_results[exp_num][i][j]= (double)Ith(y,j);
-    	//	if(verbose)printf("%f\t",Ith(y,j));
+    		if(DEBUG){
+    			printf("assignement passed\n");
+    		}
+    	//	if(verbose)
     	}
 
     	if (check_flag(&flag, "CVode", 1,verbose))
@@ -187,10 +231,41 @@ int simulateODE
     	}
     	//if(verbose)printf("\n");
     }
-    //if(verbose)printf("\n");
+    if(DEBUG){
+    	printf("checkpoint 3\n");
+    }
+    yf=(double*)malloc((*data).nStates*sizeof(double));
+    ydotf=(double*)malloc((*data).nStates*sizeof(double));
+    if(DEBUG){
+    	printf("checkpoint 4\n");
+    }
+    for (j = 0; j < (*data).nStates; j++){
+    	yf[j]= (*data).sim_results[exp_num][(*data).nTimes-1][j];
+    }
+    if(DEBUG){
+    	printf("checkpoint 5\n");
+    }
+    rhsODEF(tout,yf,ydotf, data);
+    if(DEBUG){
+    	printf("checkpoint 6\n");
+    }
+   y0=(double*)malloc((*data).nStates*sizeof(double));
+   ydot0=(double*)malloc((*data).nStates*sizeof(double));
+   for (j = 0; j < (*data).nStates; j++) y0[j]=(*data).sim_results[exp_num][0][j];
+   rhsODEF(tout,y0,ydot0, data);
+
+    
+    for (j = 0; j < (*data).nStates; j++) (*data).ydotf[exp_num][j]=ydotf[j];
+    for (j = 0; j < (*data).nStates; j++) (*data).ydot0[exp_num][j]=ydot0[j];
+
+        
 
     N_VDestroy_Serial(y);
     /* Free integrator memory */
+    
+    free(ydotf);
+    free(yf);
+    
     CVodeFree(&cvode_mem);
 
     return(1);
@@ -224,6 +299,5 @@ static int check_flag(void *flagvalue, char *funcname, int opt,int verbose)
 
 	return(0);
 }
-
 
 

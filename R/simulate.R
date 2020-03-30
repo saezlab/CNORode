@@ -12,9 +12,7 @@
 #  CNO website: http://www.cellnopt.org
 #
 ##############################################################################
-# $Id: $
-
-
+#' @export
 
 simulate <-function(cnolist,model,ode_parameters=NULL,
         indices=NULL, adjMatrix=NULL, time=1, verbose=0, transfer_function=3, 
@@ -35,8 +33,6 @@ simulate <-function(cnolist,model,ode_parameters=NULL,
             ode_parameters,indices,timeSignals,time,verbose,
             transfer_function,reltol,atol,maxStepSize,maxNumSteps,
             maxErrTestsFails);
-
-
 
     return(sim_data)
 }
