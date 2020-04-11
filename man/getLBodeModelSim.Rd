@@ -16,7 +16,7 @@
 \usage{
 	getLBodeModelSim(cnolist, model, ode_parameters = NULL, indices = NULL, timeSignals=NULL,
 	time = 1,verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, maxStepSize = Inf,
-	maxNumSteps = 1e+05, maxErrTestsFails = 50, show = TRUE)
+	maxNumSteps = 1e+05, maxErrTestsFails = 50)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -64,9 +64,6 @@
 	\item{maxErrTestsFails}{
 		Specifies the maximum number of error test failures permitted in attempting
 		one step.
-	}
-	\item{show}{
-		Boolean, default = TRUE. Should the plot shown on standard output. 
 	}
 }
 
