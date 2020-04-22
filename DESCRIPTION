@@ -10,6 +10,6 @@ Description: ODE add-on to CellNOptR
 License: GPL-2
 LazyLoad: yes
 Depends: CellNOptR (>= 1.5.14), genalg
-Enhances: MEIGOR
+Suggests: MEIGOR
 biocViews: ImmunoOncology, CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
 
