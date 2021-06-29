@@ -18,7 +18,7 @@
 	time = 1, verbose = 0, transfer_function = 3, reltol = 1e-04, atol = 0.001, 
 	maxStepSize = Inf, maxNumSteps = 1e+05, maxErrTestsFails = 50, nan_fac = 1,
 	lambda_tau = 0, lambda_k = 0, bootstrap = FALSE, SSpenalty_fac = 0, 
-    SScontrolPenalty_fac = 0, boot_seed = 1234)
+    SScontrolPenalty_fac = 0, boot_seed = sample(1:10000,1))
 }
 %- maybe also 'usage' for other objects documented here.
 

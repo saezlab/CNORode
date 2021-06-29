@@ -7,8 +7,8 @@ k-fold crossvalidation for ODE models.
 Cross-validation analysis for the logic-ode case.
 }
 \usage{
-crossvalidateODE = function(CNOlist = cnolist, model = model, type="datapoint", nfolds=3, parallel = TRUE, 
-                            ode_parameters = ode_parameters, paramsSSm = paramsSSm)
+crossvalidateODE = function(CNOlist = cnolist, model = model, nfolds=10, foldid=NULL, type="datapoint", parallel = FALSE, 
+                            ode_parameters = NULL, paramsSSm = NULL, method = "essm")
 }
 \arguments{
   \item{CNOlist}{
@@ -25,9 +25,6 @@ an optional vector of values between `1` and `nfold` identifying what fold each 
 }
   \item{type}{
 define the way to do the crossvalidation. The default is type="datapoint"`, which assigns the data randomly into folds. The option `type="experiment"` uses whole experiments for crossvalidation (all data corresponding to a cue combination). The `type=observable` uses the subset of nodes across all experiments for crossvalidation.  
-}
-  \item{timeIndex}{
-the index of the time point to optimize. Must be greater or equal to 2 (1 corresponds to time=0). Must be less than the number of time points. Default is 2.
 }
   \item{parallel}{
 verbose parameter, indicating wheter to parallelize the cross-validation procedure or not (default set to FALSE).
