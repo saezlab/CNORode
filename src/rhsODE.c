@@ -7,7 +7,7 @@
 #include "CNOStructure.h"
 #include "./include/nvector/nvector_serial.h"/* serial N_Vector types, fcts., and macros */
 
-#define Ith(v,i) ( NV_DATA_S(v)[i] )
+#define Iths(v,i) ( NV_DATA_S(v)[i] )
 #define DEBUG 0
 
 int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
@@ -31,7 +31,7 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        if((*myData).isState[j])
 	        {
 	          // hillFuncValues= (double*)malloc((*myData).numInputs[j]*sizeof(double));
-	           Ith(ydot,countState)=0;
+	          Iths(ydot,countState)=0;
 	           for (i = 0; i < (*myData).numInputs[j]; ++i)
 	           {
 	        		  nHill=(*myData).odeParameters[countPar++];
@@ -40,7 +40,7 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        		   if((*myData).isState[(*myData).input_index[j][i]])
 	        		   {
 	        			   hillFuncValues[i]=
-	        					   (*myData).transfer_function(Ith(y,(*myData).state_index[(*myData).input_index[j][i]]),nHill,kHill);
+	        					   (*myData).transfer_function(Iths(y,(*myData).state_index[(*myData).input_index[j][i]]),nHill,kHill);
 	        		   }
 	        		   else
 	        		   {
@@ -64,11 +64,11 @@ int rhsODE(realtype t, N_Vector y, N_Vector ydot, void *data)
 	        			   else tempProd*=hillFuncValues[k];
 	        		   }
 
-	        		   Ith(ydot,countState)+=tempProd;
+	        		   Iths(ydot,countState)+=tempProd;
 	        	  // }
 	           }
-	           Ith(ydot,countState)=
-	        		   (Ith(ydot,countState)-Ith(y,countState))
+	           Iths(ydot,countState)=
+	        		   (Iths(ydot,countState)-Iths(y,countState))
 	        		   	   *(*myData).odeParameters[countPar++]
 	        		   	   	   *(1-(*myData).inhibitor_array[j]);
 

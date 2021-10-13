@@ -1,9 +1,8 @@
-#' ## Crossvalidation study
-#' crossvalidate
+#' Crossvalidate ODE model
 #' 
-#' k-fold crossvalidation for Boolean model
+#' k-fold crossvalidation for logic ODE model
 #' 
-#' Does a k-fold cross-validation for Boolean CellNOpt models. In k-iterations a 
+#' Does a k-fold cross-validation for logic ODE CellNOpt models. In k-iterations a 
 #' fraction of the data is eliminated from the CNOlist. The model is trained on the 
 #' remaining data and then the model predicts the held-out data. Then the prediction
 #' accuracy is reported for each iteration. 
@@ -18,10 +17,13 @@
 #' The option `type="experiment"` uses whole experiments for crossvalidation 
 #' (all data corresponding to a cue combination). The `type=observable` uses the
 #' subset of nodes across all experiments for crossvalidation.  
-#' @param ... further arguments are passed to parEstimationLBode  
-#' @seealso \link{\code{parEstimationLBode}}  
+#' @param method Selection of optimization method: only "ga" or "essm" arguments are accepted
+#' @param parallel use for parallel execution, requires the doParallel package
+#' @param ode_parameters list of fitted logic ODE parameter
+#' @param paramsSSm parameters for the SSm optimizer for running the optimization in crossvalidation 
+#' @seealso \code{\link{parEstimationLBode}}  
 
-crossvalidateODE = function(CNOlist, model, nfolds=10, foldid=NULL, type='datapoint', parallel=FALSE, ode_parameters=NULL, paramsSSm=NULL, method = "essm", ...){
+crossvalidateODE = function(CNOlist, model, nfolds=10, foldid=NULL, type='datapoint', parallel=FALSE, ode_parameters=NULL, paramsSSm=NULL, method = "essm"){
   
   if ((class(CNOlist)=="CNOlist")==FALSE){
     CNOlist = CellNOptR::CNOlist(CNOlist)
@@ -58,8 +60,13 @@ crossvalidateODE = function(CNOlist, model, nfolds=10, foldid=NULL, type='datapo
   outlist = as.list(seq(nfolds))
   
   if (parallel) {
-    require(doParallel)
-    outlist = foreach(i = seq(nfolds), .packages = c("CNORode")) %dopar% 
+    if (!requireNamespace("doParallel", quietly = TRUE)) {
+      stop("Package \"doParallel\" needed for this function to work. Please install it or set parallel = FALSE.",
+           call. = FALSE)
+    }
+    
+    `%dopar%` <- foreach::`%dopar%`
+    outlist = foreach::foreach(i = seq(nfolds), .packages = c("CNORode")) %dopar% 
     {
       whichI = foldid == i
       CNOlist.sub = CNOlist

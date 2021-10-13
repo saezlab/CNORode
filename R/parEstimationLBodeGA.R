@@ -13,6 +13,7 @@
 #
 ##############################################################################
 #' @export
+#' @importFrom genalg rbga
 
 
 
@@ -58,7 +59,7 @@ parEstimationLBodeGA<-function (cnolist, model, ode_parameters = NULL, indices =
         monitor_func=NULL;
     }
 
-    res=rbga(x_L, x_U,popSize=popSize, iters=iters,monitorFunc=monitor_func, evalFunc=f_obj,
+    res=genalg::rbga(x_L, x_U,popSize=popSize, iters=iters,monitorFunc=monitor_func, evalFunc=f_obj,
      showSettings=FALSE, verbose=FALSE,elitism=elitism,mutationChance=mutationChance);
 
     best_individual_index=which(res$evaluations==min(res$evaluations));

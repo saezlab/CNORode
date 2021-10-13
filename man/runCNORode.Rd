@@ -4,13 +4,33 @@
 \alias{runCNORode}
 \title{runCNORode}
 \usage{
-runCNORode(model, data, compression = TRUE,
-  results_folder = "CNORode_results", cutNONC = TRUE,
-  expansion = FALSE, LB_n = 1, LB_k = 0.1, LB_tau = 0.01,
-  UB_n = 5, UB_k = 0.9, UB_tau = 10, default_n = 3,
-  default_k = 0.5, default_tau = 1, opt_n = TRUE, opt_k = TRUE,
-  opt_tau = TRUE, random = TRUE, maxeval = 1e+05, maxtime = 60,
-  transfer_function = 3, nan_fac = 1, lambda_tau = 0, lambda_k = 0)
+runCNORode(
+  model,
+  data,
+  compression = TRUE,
+  results_folder = "CNORode_results",
+  cutNONC = TRUE,
+  expansion = FALSE,
+  LB_n = 1,
+  LB_k = 0.1,
+  LB_tau = 0.01,
+  UB_n = 5,
+  UB_k = 0.9,
+  UB_tau = 10,
+  default_n = 3,
+  default_k = 0.5,
+  default_tau = 1,
+  opt_n = TRUE,
+  opt_k = TRUE,
+  opt_tau = TRUE,
+  random = TRUE,
+  maxeval = 1e+05,
+  maxtime = 60,
+  transfer_function = 3,
+  nan_fac = 1,
+  lambda_tau = 0,
+  lambda_k = 0
+)
 }
 \arguments{
 \item{model}{A filename of prior knowledge network (PKN) in the SIF format}

@@ -6,7 +6,7 @@
 %\VignettePackage{CNORode}
 
 \documentclass{article}
-\usepackage{Sweave,fullpage}
+\usepackage{Sweave}
 \usepackage{url, color}
 
 %\usepackage{cmap}

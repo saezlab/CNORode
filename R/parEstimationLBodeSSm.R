@@ -25,13 +25,15 @@ parEstimationLBodeSSm <-function
 		SSpenalty_fac=0, SScontrolPenalty_fac=0, boot_seed=sample(1:10000,1)
 )
 {
-
-   if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
-   if(!require(MEIGOR)) stop("MEIGOR (essR) package not found.
-	SSm not available. Install the MEIGOR package and load it or try the Genetic Algorithm
-	optimiser instead.");
-
-
+	
+	if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
+	if (!requireNamespace("MEIGOR", quietly = TRUE)) {
+		stop("Package \"MEIGOR\" needed for SSm to work. Please install it or try the Genetic Algorithm
+	optimiser instead.",
+			 call. = FALSE)
+	}
+	
+	
 	checkSignals(CNOlist=cnolist,model=model)
 	
 	adjMat=incidence2Adjacency(model);
@@ -49,7 +51,7 @@ parEstimationLBodeSSm <-function
 	opts$maxeval=0;
 	opts$maxtime=0;
 
-    val=essR(problem,opts)
+    val=MEIGOR::essR(problem,opts)
 
 	problem=list();
 	problem$f<-getLBodeContObjFunction(cnolist=cnolist,

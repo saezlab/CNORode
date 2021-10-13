@@ -14,7 +14,7 @@ int** getTruthTables(int** adjMat,int** interMat,int** notMat,
 		int* isState,int* nInputs,int *nBits,int nRows,int nCols)
 {
 
-	int i,j,k,m,n,counter1,input,miniterm;
+	int i,j,k,m,counter1,input,miniterm;
 	//printInterMat(interMat,nRows,nCols);
 	//printAdjMat(adjMat,nRows);
 	//Tridimensional matrix of Size: states x nMiniTerms(state) x nInputs(state)

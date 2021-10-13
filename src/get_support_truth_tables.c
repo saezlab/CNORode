@@ -13,7 +13,7 @@ int* decimal2binary(int decimal_value,int nBits);
 
 int*** get_support_truth_tables(int n,int *nInputs)
 {
-	int i,j,k;
+	int i,j;
 	int*** support_truth_tables=(int***)malloc(n*sizeof(int**));
 
 	for (i = 0; i < n; ++i)
