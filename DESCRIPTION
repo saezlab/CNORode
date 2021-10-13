@@ -4,7 +4,7 @@ Title: logic ODE add-on to CellNOptR
 Version: 2.1.0
 Date: 2020-30-03
 Author: David Henriques, Thomas Cokelaer, Attila Gabor, Federica Eduati, Enio Gjerga
-Maintainer: Enio Gjerga <enio.gjerga@gmail.com>
+Maintainer: Attila Gabor <attila.gabor@uni-heidelberg.de>
 Description: Logic based ordinary differential equation (ODE) add-on to
     CellNOptR.
 License: GPL-2
