@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{Main vignette:Playing with networks using CNORode}
+%\VignetteIndexEntry{Training Signalling Pathway Maps to Biochemical Data with Logic-Based Ordinary Differential Equations}
 %\VignetteKeywords{Training Signalling Pathway Maps to
 %	Biochemical Data with Logic-Based Ordinary Differential Equations
 %}
@@ -63,6 +63,7 @@
 \affil[4]{RWTH Aachen University, Faculty of Medicine, Joint Research Centre for Computational Biomedicine (JRC-COMBINE)}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \maketitle
 
 \tableofcontents
@@ -173,9 +174,9 @@ should type the following commands:
 <<quickstart, eval=TRUE, results=hide>>=
 	library(CNORode)
 	model=readSIF(system.file("extdata", "ToyModelMMB_FeedbackAnd.sif",
-		package="CNORode"));
+		package="CNORode",lib.loc = .libPaths()));
 	cno_data=readMIDAS(system.file("extdata", "ToyModelMMB_FeedbackAnd.csv",
-		package="CNORode"));
+		package="CNORode",lib.loc = .libPaths()));
 	cnolist=makeCNOlist(cno_data,subfield=FALSE);
 @
 
@@ -234,7 +235,7 @@ sampled in 5 different instants (\emph{timeSignals}).
 \begin{figure}[ht]
 \begin{center}
 <<label=plotModelSim,include=TRUE,fig=TRUE>>=
-modelSim=plotLBodeModelSim(cnolist, model, ode_parameters,
+modelSim=plotLBodeModelSim(cnolist = cnolist, model, ode_parameters,
  	timeSignals=seq(0,2,0.5));
 @
 \caption{A model simulation plotted with \emph{plotLBodeModelSim} ..

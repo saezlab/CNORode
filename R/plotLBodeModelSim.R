@@ -49,11 +49,11 @@ plotLBodeModelSim <-function
 	if (show==T){
 		if(large)
 		{
-			plotCNOlistLarge(CNOlist(cnolist),nsplit);
+			plotCNOlistLarge(cnolist,nsplit);
 		}
 		else
 		{   
-			plotCNOlist(CNOlist(cnolist));
+			plotCNOlist(cnolist);
 		}
 	}
 	

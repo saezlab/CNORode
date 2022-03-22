@@ -1,17 +1,37 @@
 Package: CNORode
 Type: Package
 Title: ODE add-on to CellNOptR 
-Version: 1.37.0
-Date: 2021-10-13
+Version: 1.37.1
+Date: 2022-03-22
+Authors@R: c(
+	person(given = "David",
+           family = "Henriques",
+           role = "aut"),
+    person(given = "Thomas",
+           family = "Cokelaer",
+           role = c("aut")),
+    person(given = "Federica",
+           family = "Eduati",
+           role = "ctb"),
+    person(given = "Enio",
+           family = "Gjerga",
+           role = "ctb"),
+    person(given = "Attila",
+           family = "Gabor",
+           role = "cre",
+           email = "attila.gabor@uni-heidelberg.de")
+           )
 Author: David Henriques, Thomas Cokelaer, Attila Gabor, Federica Eduati, Enio Gjerga
-Maintainer: Attila Gabor <attila.gabor@uni-heidelberg.de>
 Description: Logic based ordinary differential equation (ODE) add-on to
     CellNOptR.
 License: GPL-2
 LazyLoad: yes
-Depends: CellNOptR (>= 1.5.14), genalg
+Depends: CellNOptR,
+	genalg,
+	knitr
 Enhances: MEIGOR,
 	doParallel,
 	foreach
+VignetteBuilder: knitr
 biocViews: ImmunoOncology, CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
 RoxygenNote: 7.1.2
