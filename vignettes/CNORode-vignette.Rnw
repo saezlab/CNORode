@@ -128,10 +128,7 @@ it can be downloaded from
 \url{https://www.bioconductor.org/packages/release/bioc/html/MEIGOR.html}. 
 MEIGOR can be installed by typing
 
-<<installMEIGOR, eval=FALSE>>=
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
+<<installMEIGOR, eval=TRUE>>=
 BiocManager::install("MEIGOR")
 @
 
