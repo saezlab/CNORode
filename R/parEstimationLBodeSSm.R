@@ -29,7 +29,8 @@ parEstimationLBodeSSm <-function
 	if (class(cnolist)=="CNOlist"){cnolist = compatCNOlist(cnolist)}
 	if (!requireNamespace("MEIGOR", quietly = TRUE)) {
 		stop("Package \"MEIGOR\" needed for SSm to work. Please install it or try the Genetic Algorithm
-	optimiser instead.",
+	optimiser instead. MEIGOR got depricated on Bioconductor in release 3.18, but you can download the latest
+			 version from Github: https://github.com/jaegea/MEIGOR/tree/RELEASE_3_18 ",
 			 call. = FALSE)
 	}
 	
