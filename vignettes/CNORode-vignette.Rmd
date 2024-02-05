@@ -65,7 +65,7 @@ algorithm  is part of the MEIGOR toolbox which was available on BioConductor (be
 
 MEIGOR can be installed by typing
 
-```{r installMEIGOR, eval=TRUE}
+```{r installMEIGOR, eval=FALSE}
 # MEIGOR is deprecated in Bioc in 3.18
 #BiocManager::install("MEIGOR")
 if (!requireNamespace("MEIGOR", quietly=TRUE))
@@ -205,8 +205,9 @@ opt_pars=parEstimationLBode(cnolist,model,ode_parameters=initial_pars,
 simulatedData=plotLBodeFitness(cnolist, model,ode_parameters=opt_pars)
 ```
 
-Model optimisation using eSS:
-```{r eval=TRUE, results='hide'}
+Model optimization using eSS (not evaluated):
+
+```{r eval=FALSE, results='hide'}
 
 requireNamespace("MEIGOR")
 
@@ -238,29 +239,19 @@ fit_result_ess =
 								   initial_pars,
 								   transfer_function = 3)
 ```
-\begin{center}
-\begin{figure}[ht]
-\caption{The initial solution before optimization. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
+
+The initial solution before optimization. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
 The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
-gives an indication of squared difference where red means high error and white low error.}
-
-\end{figure}
-\end{center}
+gives an indication of squared difference where red means high error and white low error.
 
 
 
-```{r label=plotFinalFit_fit,include=TRUE,fig=TRUE}
+```{r label=plotFinalFit_fit,eval = FALSE}
 	simulatedData=plotLBodeFitness(cnolist, model,
 								   ode_parameters=fit_result_ess,
 								   transfer_function = 3)
 ```
-\begin{figure}[ht]
-\begin{center}
-\end{center}
-\caption{A solution obtained by optimization with a genetic algorithm. Each row corresponds to an experiment with a particular combination of stimuli and inhibitors.
-The columns correspond to the measured values (triangles) and the simulated values (dashed blue lines) from a given signal. The background color
-gives an indication of squared difference where red means high error and white low error.}
-\end{figure}
+
 
 
 \clearpage
