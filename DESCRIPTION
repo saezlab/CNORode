@@ -27,11 +27,13 @@ Description: Logic based ordinary differential equation (ODE) add-on to
 License: GPL-2
 LazyLoad: yes
 Depends: CellNOptR,
-	genalg,
-	knitr
+	genalg
 Enhances: 
 	doParallel,
 	foreach
+Suggests: 
+		knitr,
+		rmarkdown
 VignetteBuilder: knitr
 biocViews: ImmunoOncology, CellBasedAssays, CellBiology, Proteomics, Bioinformatics, TimeCourse
 RoxygenNote: 7.1.2
