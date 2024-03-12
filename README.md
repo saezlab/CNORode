@@ -20,30 +20,25 @@ For more general information about the CellNOpt project visit: http://www.cellno
 *CNORode* requires *CellNOptR* and *MEIGOR* which are available in Bioconductor and can be installed typing:
 
 ```R
-source("https://bioconductor.org/biocLite.R")
-biocLite("CellNOptR")
-biocLite("MEIGOR")
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("CNORode")
+BiocManager::install("MEIGOR")
 ```
 
 Alternatively, you can obtain the most recent version of *CellNOptR* from our GitHub repository:
 
 ```R
-library(devtools)
-install_github("saezlab/CellNOptR")
+remotes::install_github("saezlab/CellNOptR")
 ```
 
 *CNORode* can be installed from this repository by typing:
 
 ```R
-library(devtools)
-install_github("saezlab/CNORode")
+remotes::install_github"saezlab/CNORode")
 ```
 
-Install the developement version of CNORode:
-```R
-library(devtools)
-install_github("saezlab/CNORode",ref="crossval", build_vignettes = TRUE)
-```
 
 
 ### Basic info on logic based ODE and CNORode
