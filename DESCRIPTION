@@ -1,7 +1,7 @@
 Package: CNORode
 Type: Package
 Title: ODE add-on to CellNOptR 
-Version: 1.45.3
+Version: 1.53.1
 Date: 2022-03-22
 Authors@R: c(
 	person(given = "David",
@@ -18,8 +18,11 @@ Authors@R: c(
            role = "ctb"),
     person(given = "Attila",
            family = "Gabor",
+           role = "ctb"),
+    person(given = "Aurelien",
+           family = "Dugourd",
            role = "cre",
-           email = "attila.gabor@uni-heidelberg.de")
+           email = "dugourd@ebi.ac.uk")
            )
 Author: David Henriques, Thomas Cokelaer, Attila Gabor, Federica Eduati, Enio Gjerga
 Description: Logic based ordinary differential equation (ODE) add-on to
